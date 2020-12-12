@@ -17,16 +17,20 @@
 # include <stdbool.h>
 # include <string.h>
 
+# include "ssl.h"
+
 typedef struct          s_connect4 {
     int                 socket;
     bool                error;
     char                errorMsg[BUFFER_ERROR_SIZE];
     unsigned int        sizeCSin;
     struct sockaddr_in  cSin;
-
+    SSL                 *cSSL;
+    SSL_CTX             *sslctx;
+    char                *pathFileCertificat;
 }                       t_connect4;
 
-void                    initConnect4(t_connect4 *ret, uint32_t portReader);
+void                    initConnect4(t_connect4 *ret, uint32_t portReader, char *pathFileCertificat);
 bool                    isValidConnect4(const t_connect4 *connect4);
 char*                   getErrorMsgConnect4(t_connect4 *connect4);
 void                    waitingForCliencConnect4(t_connect4 *connect4);

@@ -14,6 +14,7 @@ void                    initConnect4(t_connect4 *ret, uint32_t portReader, char 
         snprintf(ret->errorMsg, BUFFER_ERROR_SIZE, "Not possible to initialise socket %s %d\n", __FILE__, __LINE__);
         return ;
     }
+    fcntl(ret->socket, F_SETFL, O_NONBLOCK);
     sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     sin.sin_family = AF_INET;
     sin.sin_port = htons(portReader);
@@ -42,31 +43,27 @@ char*                   getErrorMsgConnect4(t_connect4 *connect4) {
 void                    waitingForCliencConnect4(t_connect4 *connect4) {
     int                 fd;
     
-    printf("Wainting for client\n");
-    fd = accept(connect4->socket, (struct sockaddr*)&connect4->cSin, &connect4->sizeCSin);
-    if (fd <= 0) {
-        printf("\033[31mClient connection failled\n\033[0m");
-        return ;
-    }
-    connect4->sslctx = SSL_CTX_new( SSLv23_server_method());
-    SSL_CTX_set_options(connect4->sslctx, SSL_OP_SINGLE_DH_USE);
-    if (SSL_CTX_use_certificate_file(connect4->sslctx, connect4->pathFileCertificat , SSL_FILETYPE_PEM) == 1) {
-        if (SSL_CTX_use_PrivateKey_file(connect4->sslctx, connect4->pathFileCertificat, SSL_FILETYPE_PEM) == 1) {
-            connect4->cSSL = SSL_new(connect4->sslctx);
-            SSL_set_fd(connect4->cSSL, fd);
-            if(SSL_accept(connect4->cSSL) > 0){
-                printf("\033[32mClient connected on the fd[%d]\n\033[0m", fd);
-            }  else {
-                printf("\033[31mError sslError %s %d\n\033[0m", __FILE__, __LINE__);
+    if ((fd = accept(connect4->socket, (struct sockaddr*)&connect4->cSin, &connect4->sizeCSin)) > 0) {
+        connect4->sslctx = SSL_CTX_new( SSLv23_server_method());
+        SSL_CTX_set_options(connect4->sslctx, SSL_OP_SINGLE_DH_USE);
+        if (SSL_CTX_use_certificate_file(connect4->sslctx, connect4->pathFileCertificat , SSL_FILETYPE_PEM) == 1) {
+            if (SSL_CTX_use_PrivateKey_file(connect4->sslctx, connect4->pathFileCertificat, SSL_FILETYPE_PEM) == 1) {
+                connect4->cSSL = SSL_new(connect4->sslctx);
+                SSL_set_fd(connect4->cSSL, fd);
+                if(SSL_accept(connect4->cSSL) > 0){
+                    printf("\033[32mClient connected on the fd[%d]\n\033[0m", fd);
+                }  else {
+                    printf("\033[31mError sslError %s %d\n\033[0m", __FILE__, __LINE__);
+                }
+                shutdownSSL(connect4->cSSL);
+            } else {
+                printf("\033[31mError userPrv %s %d\n\033[0m", __FILE__, __LINE__);
             }
-            shutdownSSL(connect4->cSSL);
         } else {
-            printf("\033[31mError userPrv %s %d\n\033[0m", __FILE__, __LINE__);
+            printf("\033[31mError useCert %s %d\n\033[0m", __FILE__, __LINE__);
         }
-    } else {
-        printf("\033[31mError useCert %s %d\n\033[0m", __FILE__, __LINE__);
+        close (fd);
     }
-    close (fd);
 }
 
 void                    closeConnect4(t_connect4 *connect4) {

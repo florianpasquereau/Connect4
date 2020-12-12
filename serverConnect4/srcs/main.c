@@ -41,6 +41,7 @@ int                     main(int argc, char **argv) {
     }
     while (keepRunning) {
         waitingForCliencConnect4(&connect4);
+        sleep(1);
     }
     closeConnect4(&connect4);
     return EXIT_SUCCESS;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CERTIFICATE_NAME=connect4
+CERTIFICATE_NAME=${PWD}/Certificate/connect4
 RSA_LENGTH=2048
 DAYS=365
 
@@ -12,5 +12,10 @@ openssl req \
 	-days $DAYS \
 	-out $CERTIFICATE_NAME.crt
 
-cat $CERTIFICATE_NAME.crt $CERTIFICATE_NAME.key > $CERTIFICATE_NAME.pem
+cat $CERTIFICATE_NAME.crt \
+	$CERTIFICATE_NAME.key \
+	> $CERTIFICATE_NAME.pem
+
+rm $CERTIFICATE_NAME.crt \
+	$CERTIFICATE_NAME.key
 

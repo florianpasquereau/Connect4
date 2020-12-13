@@ -17,7 +17,7 @@ void                    initSignal() {
 }
 
 void                    helper(char **argv) {
-    fprintf(stderr, "%s <port reader(between : %d <-> %d)> <certificat.pem>\n", argv[0], MIN_PORT, MAX_PORT);
+    fprintf(stderr, "%s <port reader(between : %d <-> %d)> <certificate.pem>\n", argv[0], MIN_PORT, MAX_PORT);
     exit(EXIT_FAILURE);
 }
 

@@ -1,10 +1,10 @@
 NAME			= connect4
 
-SRC_NAME		= $(sort main.c connect4.c)
+SRC_NAME		= $(sort main.c connect4.c ssl.c)
 
 INCLUDES		= connect4.h
 
-LIBRARY			= 
+LIBRARY			= -lssl -lcrypto
 
 OTHERS			= libft Makefile auteur
 

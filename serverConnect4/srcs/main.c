@@ -17,7 +17,7 @@ void                    initSignal() {
 }
 
 void                    helper(char **argv) {
-    fprintf(stderr, "%s <port reader(between : %d <-> %d)>\n", argv[0], MIN_PORT, MAX_PORT);
+    fprintf(stderr, "%s <port reader(between : %d <-> %d)> <certificate.pem>\n", argv[0], MIN_PORT, MAX_PORT);
     exit(EXIT_FAILURE);
 }
 
@@ -25,7 +25,7 @@ int                     main(int argc, char **argv) {
     uint32_t            port;
     t_connect4          connect4;
 
-    if (argc != 2) {
+    if (argc != 3) {
         helper(argv);
     }
     initSignal();
@@ -33,7 +33,7 @@ int                     main(int argc, char **argv) {
         fprintf(stderr, "'%s' is not a valid <port reader> value\n", argv[1]);
         helper(argv);
     }
-    initConnect4(&connect4, port);
+    initConnect4(&connect4, port, argv[2]);
     if (!isValidConnect4(&connect4)) {
         fprintf(stderr, "%s", getErrorMsgConnect4(&connect4));
         closeConnect4(&connect4);
@@ -41,6 +41,7 @@ int                     main(int argc, char **argv) {
     }
     while (keepRunning) {
         waitingForCliencConnect4(&connect4);
+        sleep(1);
     }
     closeConnect4(&connect4);
     return EXIT_SUCCESS;

@@ -59,4 +59,4 @@ fclean:
 	make fclean -C $(CONNECT4_DAEMON_PATH)
 
 .phony:
-	run_server run_client fclean
+	run_server run_client fclean install

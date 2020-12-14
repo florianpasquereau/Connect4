@@ -1,4 +1,4 @@
-NAME			= connect4
+NAME			= connect4_d
 
 SRC_NAME		= $(sort main.c connect4.c ssl.c)
 

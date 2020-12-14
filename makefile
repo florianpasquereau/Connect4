@@ -1,5 +1,34 @@
-server:
+CERTIFICATE_PATH			=${PWD}/Certificate
+CERTIFICATE_NAME     		=connect4
+RSA_LENGTH					=2048
+DAYS						=365
+
+CONNECT4_DAEMON_PORT		=7878
+CONNECT4_DAEMON_PATH		=${PWD}/serverConnect4
+CONNECT4_DAEMON_BIN_NAME	=connect4
+
+
+CERTIFICATE 				=$(addprefix $(CERTIFICATE_PATH)/, $(CERTIFICATE_NAME))
+CONNECT4_DAEMON				=$(addprefix $(CONNECT4_DAEMON_PATH)/, $(CONNECT4_DAEMON_BIN_NAME))
+CERTIFICATE_FILE_NAME		=$(addprefix $(CERTIFICATE),.pem)
+
+$(CERTIFICATE_FILE_NAME): $(CERTIFICATE_PATH)
+	openssl req \
+		-newkey rsa:$(RSA_LENGTH) \
+		-nodes \
+		-keyout $(CERTIFICATE).key \
+		-x509 \
+		-days $(DAYS) \
+		-out $(CERTIFICATE).crt
+	cat $(CERTIFICATE).crt \
+		$(CERTIFICATE).key \
+		> $(CERTIFICATE_FILE_NAME)
+
+$(CERTIFICATE_PATH):
+	mkdir $(CERTIFICATE_PATH)
+
+$(CONNECT4_DAEMON):
 	make -C serverConnect4
 
-install: $(server)
-	./Certificate/generateCertificate.sh
+run: $(CERTIFICATE_FILE_NAME) $(CONNECT4_DAEMON)
+	$(CONNECT4_DAEMON) $(CONNECT4_DAEMON_PORT) $(CERTIFICATE_FILE_NAME)

@@ -8,7 +8,21 @@ Client(PHP 7.4 Symfony5.2) and server(Language C) exchanges are done in TCP. The
 
 ![alt text](./Images/process.PNG "Process used")
 
-Commandes
+If you want to customize settings, you can have a look in the `makefile` in the root project directory.
+
+Requirements:
 ----------
-make run_server : to start the server
-make run_client : to start the client
+- gcc
+- libssl
+- libcrypto
+- composer 2.*
+- php 7.4* or php 8.*
+
+Commandes:
+----------
+- make install: install all requirements to be able to run the server and the client:
+    - Create a self-signed certificate
+    - compile the connect4_d
+    - install connect4 dependencies
+- make run_server: to start the server
+- make run_client: to start the client

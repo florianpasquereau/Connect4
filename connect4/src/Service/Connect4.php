@@ -37,8 +37,6 @@ final class Connect4 {
                 ]
             ]
         );
-
-
     }
 
     /**

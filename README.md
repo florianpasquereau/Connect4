@@ -25,4 +25,5 @@ Commandes:
     - compile the connect4_d
     - install connect4 dependencies
 - make run_server: to start the server
+- make run_selenium: to start the selenium server
 - make run_client: to start the client

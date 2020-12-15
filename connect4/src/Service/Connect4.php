@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Exception\Connect4Exception;
-use Stringable;
 
 final class Connect4 {
     private string $address;
@@ -41,9 +40,11 @@ final class Connect4 {
 
     /**
      * @param String|Stringable $data
+     * @return null|string
      * @throws Connect4Exception
      */
-    public function send($data) {
+    public function send($data) : ?string{
+        $ret = null;
         $fd = stream_socket_client($this->address,
             $this->errorCode, $this->errorMessage, $this->timeout, $this->flag, $this->streamContext);
         if (!$fd) {
@@ -54,7 +55,8 @@ final class Connect4 {
         } else {
             fwrite($fd, $data);
         }
-        sleep(1);
+        $ret = fread($fd, 2000);
         fclose($fd);
+        return $ret;
     }
 }

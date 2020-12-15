@@ -74,14 +74,31 @@ void                    closeConnect4(t_connect4 *connect4) {
 }
 
 void                    manageData(t_connect4 *connect4) {
+    
+    printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
+    readCurrentGrid(connect4);
+    printf("%s", connect4->buffer);
+    sendIAGame(connect4);
+}
+
+void                    readCurrentGrid(t_connect4 *connect4) {
     int                 bufferSize = BUFFER_SIZE - 1;
     int                 read;
-    printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
 
-    while ((read = SSL_read(connect4->cSSL, connect4->buffer, bufferSize)) == bufferSize) {
+    if (connect4 != NULL) {
+        while ((read = SSL_read(connect4->cSSL, connect4->buffer, bufferSize)) == bufferSize) {
+            connect4->buffer[read] = '\0';
+        }
         connect4->buffer[read] = '\0';
-        printf("%s", connect4->buffer);
     }
-    connect4->buffer[read] = '\0';
-    printf("%s", connect4->buffer);
 }
+
+void                    sendIAGame(t_connect4 *connect4) {
+    char                ret[2];
+
+    if (connect4 != NULL) {
+        ret[0] = '0' + rand() % GRID_WIDTH;
+        ret[1] = '\0';
+        SSL_write(connect4->cSSL, ret, 2);
+    }                
+}           

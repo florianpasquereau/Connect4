@@ -10,8 +10,8 @@ interface Stringable {
     public function __toString() : string;
 
     /**
-     * Convert the object into a string socket
-     * @return string
+     * Convert the object into a socket
+     * @return array
      */
-    public function __toSocket() : string;
+    public function __toSocket() : array;
 }

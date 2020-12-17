@@ -3,6 +3,8 @@
 namespace App\Service\Selenium;
 
 use App\Exception\Connect4SeleniumException;
+use App\Service\ExchangeConnect4\RequestGrid;
+use App\Service\ExchangeConnect4\ResponseGrid;
 use App\Service\Grid\Cell\CellValue;
 use App\Service\Grid\Grid;
 use Facebook\WebDriver\Exception\NoSuchElementException;
@@ -34,7 +36,7 @@ class Connect4Selenium {
         sleep(5);
     }
 
-    public function updateGrid() : Grid {
+    public function buildRequestGrid() : RequestGrid {
         $grid = new Grid();
         $holes = $this->driver
             ->findElement(WebDriverBy::cssSelector('#gameBoard'))
@@ -51,14 +53,15 @@ class Connect4Selenium {
             $value = $this->getValueCell($child);
             $grid->cetCell($y, $x, $value);
         }
-        return $grid;
+        return new RequestGrid($grid, CellValue::RED);
     }
 
     /**
-     * @param int $column
+     * @param ResponseGrid $answerGrid
      * @throws Connect4SeleniumException
      */
-    public function putCoin(int $column) {
+    public function putCoin(ResponseGrid $answerGrid) {
+        $column = $answerGrid->getColumnIaSelected();
         if ($column < 0 || $column >= Grid::WIDTH) {
             throw new Connect4SeleniumException(sprintf("The column '%d' is not valid", $column));
         }

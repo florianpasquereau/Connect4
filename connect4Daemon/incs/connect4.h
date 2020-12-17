@@ -5,7 +5,6 @@
 # define MAX_PORT 0xffffu
 
 # define BUFFER_ERROR_SIZE 150
-# define BUFFER_SIZE 2000
 # define BACKLOG 1
 
 # include <sys/types.h>
@@ -21,18 +20,19 @@
 
 # include "grid.h"
 # include "ssl.h"
+# include "responseGrid.h"
 
 typedef struct          s_connect4 {
     int                 socket;
     int                 fd;
     bool                error;
     char                errorMsg[BUFFER_ERROR_SIZE];
-    char                buffer[BUFFER_SIZE];
     unsigned int        sizeCSin;
     struct sockaddr_in  cSin;
     SSL                 *cSSL;
     SSL_CTX             *sslctx;
     char                *pathFileCertificat;
+    t_grid              grid;
 }                       t_connect4;
 
 void                    initConnect4(t_connect4 *ret, uint32_t portReader, char *pathFileCertificat);

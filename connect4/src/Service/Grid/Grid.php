@@ -35,17 +35,18 @@ class Grid implements Stringable {
     }
 
     /**
+     * @return int[][]
      * @inheritDoc
      */
-    public function __toSocket(): string
+    public function __toSocket(): array
     {
-        $ret = "";
-
+        $ret = [];
         for ($y = 0; $y < Grid::HEIGHT; $y++) {
+            $row = [];
             for ($x = 0; $x < Grid::WIDTH; $x++) {
-                $ret .= $this->grid[$y][$x]->__toSocket();
+                $row[] = $this->grid[$y][$x]->getValue();
             }
-            $ret .= "\n";
+            $ret[] = $row;
         }
         return $ret;
     }

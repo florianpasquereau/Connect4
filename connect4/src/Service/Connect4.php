@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Exception\Connect4Exception;
+use App\Service\ExchangeConnect4\RequestGrid;
+use App\Service\ExchangeConnect4\ResponseGrid;
 
 final class Connect4 {
     private string $address;
@@ -39,24 +41,20 @@ final class Connect4 {
     }
 
     /**
-     * @param String|Stringable $data
-     * @return null|string
+     * @param RequestGrid $requestGrid
+     * @return null|ResponseGrid
      * @throws Connect4Exception
      */
-    public function send($data) : ?string{
+    public function send(RequestGrid $requestGrid) : ?ResponseGrid{
         $ret = null;
         $fd = stream_socket_client($this->address,
             $this->errorCode, $this->errorMessage, $this->timeout, $this->flag, $this->streamContext);
         if (!$fd) {
             throw new Connect4Exception(sprintf("'%s' is not accessible code : %s -> %s", $this->address, $this->errorCode, $this->errorMessage));
         }
-        if (is_object($data)) {
-            fwrite($fd, $data->__toString());
-        } else {
-            fwrite($fd, $data);
-        }
-        $ret = fread($fd, 2000);
+        fwrite($fd, json_encode($requestGrid));
+        $responseGrid = fread($fd, 2000);
         fclose($fd);
-        return $ret;
+        return new ResponseGrid($responseGrid);
     }
 }

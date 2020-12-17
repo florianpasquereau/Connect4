@@ -77,28 +77,39 @@ void                    manageData(t_connect4 *connect4) {
     
     printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
     readCurrentGrid(connect4);
-    printf("%s", connect4->buffer);
     sendIAGame(connect4);
 }
 
 void                    readCurrentGrid(t_connect4 *connect4) {
-    int                 bufferSize = BUFFER_SIZE - 1;
     int                 read;
+    char                requestGrid[BUFFER_SIZE + 1];
 
     if (connect4 != NULL) {
-        while ((read = SSL_read(connect4->cSSL, connect4->buffer, bufferSize)) == bufferSize) {
-            connect4->buffer[read] = '\0';
+        while ((read = SSL_read(connect4->cSSL, requestGrid, BUFFER_SIZE)) == BUFFER_SIZE) {
+            requestGrid[read] = '\0';
         }
-        connect4->buffer[read] = '\0';
+        requestGrid[read] = '\0';
     }
+    initGrid(&connect4->grid, requestGrid);
 }
 
 void                    sendIAGame(t_connect4 *connect4) {
-    char                ret[2];
+    time_t              start_t, end_t;
+    double              timeSpend;
+    t_answerGrid        answerGrid;
+    char                *answer;
 
     if (connect4 != NULL) {
-        ret[0] = '0' + rand() % GRID_WIDTH;
-        ret[1] = '\0';
-        SSL_write(connect4->cSSL, ret, 2);
+        time(&start_t);
+        sleep(1);
+        time(&end_t);
+        timeSpend = difftime(end_t, start_t);
+        initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
+        answer = answerGridToJson(&answerGrid);
+        SSL_write(connect4->cSSL, answer, strlen(answer));
+        free(answer);
+        answer = NULL;
+        printGrid(&connect4->grid);
+        destructGrid(&connect4->grid);
     }                
 }           

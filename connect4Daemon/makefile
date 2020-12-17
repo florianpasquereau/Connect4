@@ -1,10 +1,10 @@
 NAME			= connect4_d
 
-SRC_NAME		= $(sort main.c connect4.c ssl.c)
+SRC_NAME		= $(sort main.c connect4.c ssl.c responseGrid.c grid.c cell.c)
 
 INCLUDES		= connect4.h
 
-LIBRARY			= -lssl -lcrypto
+LIBRARY			= -lssl -lcrypto -ljson-c
 
 OTHERS			= libft Makefile auteur
 
@@ -25,13 +25,9 @@ INC				= $(addprefix $(INCDIR)/, $(INCLUDES))
 
 All : $(NAME)
 
-$(NAME) : $(OBJDIR) $(OBJ) $(LIBRARY)
+$(NAME) : $(OBJDIR) $(OBJ)
 	$(GCC) $(CFLAGS) $(OTHER_FLAGS) -o $(NAME) $(OBJ) $(LIBRARY)
 	@echo "\033[0;32m"$(NAME) "DONE\033[0m"
-
-$(LIBRARY) :
-	@echo "\033[0;32mCOMPILE LIBFT\033[0m"
-	make -C libft
 
 $(OBJDIR)/%.o : $(SRCDIR)/%.c $(INC)
 	$(GCC) -I $(INCDIR)/ $(CFLAGS) -o $@ -c $<

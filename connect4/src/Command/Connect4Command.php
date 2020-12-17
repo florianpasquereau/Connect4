@@ -29,22 +29,17 @@ class Connect4Command extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws Connect4Exception
-     * @throws Connect4SeleniumException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connect4 = new Connect4($input->getArgument('hostname'), $input->getArgument('port'), $input->getArgument('certificate'));
-
         $connect4Selenium = new Connect4Selenium();
         $connect4Selenium->startParty('https://www.helpfulgames.com/subjects/brain-training/connect-four.html');
         do {
-            $grid = $connect4Selenium->updateGrid();
-            $output->writeln($grid->__toString());
-            if (($column = $connect4->send($grid->__toSocket())) === null) {
-                throw new Connect4Exception('Column empty');
-            }
-            $connect4Selenium->putCoin((int)$column);
+            $requestGrid = $connect4Selenium->buildRequestGrid();
+            $output->writeln($requestGrid->getGrid()->__toString());
+            $answerGrid = $connect4->send($requestGrid);
+            $connect4Selenium->putCoin($answerGrid);
 
         } while(true);
         sleep(5);

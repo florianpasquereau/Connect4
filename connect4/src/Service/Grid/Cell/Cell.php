@@ -31,8 +31,8 @@ class Cell implements Stringable {
         return $this->value === CellValue::RED ? '<fg=red>R </>' : '<fg=yellow>Y </>';
     }
 
-    public function __toSocket(): string
+    public function __toSocket(): array
     {
-        return $this->getValue();
+        return [$this->getValue()];
     }
 }

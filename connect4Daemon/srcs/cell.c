@@ -1,28 +1,19 @@
 #include "../incs/cell.h"
 
-t_cell                  *cellFactory(int const cellValue) {
-    e_value             value;
-    t_cell              *cell = (t_cell*)malloc(sizeof(t_cell));
-    
+bool                    cellSetValue(t_cell *cell, e_value value) 
+{
     if (cell == NULL) {
-        return cell;
-    }
-    switch (cellValue) {
-        case 1:
-            value = RED;
-            break ;
-        case 2:
-            value = YELLOW;
-            break;
-        default:
-            value = EMPTY;
+        return false;
     }
     cell->value = value;
-    return cell;
+    return true;
 }
 
 char                    *printCell(t_cell const *cell)
 {
+    if (cell == NULL) {
+        return "ERROR";
+    }
     switch (cell->value) {
         case RED:
             return " \033[0;31mR\033[0m";

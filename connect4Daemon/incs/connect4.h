@@ -41,8 +41,8 @@ char*                   getErrorMsgConnect4(t_connect4 *connect4);
 void                    waitingForCliencConnect4(t_connect4 *connect4);
 void                    closeConnect4(t_connect4 *connect4);
 
-void                    manageData(t_connect4 *connect4);
-void                    readCurrentGrid(t_connect4 *connect4);
-void                    sendIAGame(t_connect4 *connect4);
+bool                    manageData(t_connect4 *connect4);
+bool                    readCurrentGrid(t_connect4 *connect4);
+bool                    sendIAGame(t_connect4 *connect4);
 
 #endif

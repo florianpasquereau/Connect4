@@ -2,16 +2,20 @@
 
 void                    initAnswerGrid(t_answerGrid *answerGrid, unsigned const char columnIaSelected, double const timeSpend, bool const gameFinish)
 {
+    if (answerGrid == NULL) {
+        return ;
+    }
     answerGrid->columnIaSelected = columnIaSelected;
     answerGrid->timeSpend = timeSpend;
     answerGrid->gameFinish = gameFinish;
 }
 
-char                    *answerGridToJson(t_answerGrid const *answerGrid)
+char                    *answerGridToJson(t_answerGrid *answerGrid)
 {
-    char                buffer[BUFFER_SIZE + 1];
-
-    snprintf(buffer, BUFFER_SIZE + 1, "{\
+    if (answerGrid == NULL) {
+        return NULL;
+    }
+    snprintf(answerGrid->buffer, BUFFER_SIZE, "{\
             \"column_ia_selected\":%d,\
             \"time_spend\":%f,\
             \"game_finish\":%s\
@@ -20,5 +24,5 @@ char                    *answerGridToJson(t_answerGrid const *answerGrid)
         answerGrid->timeSpend,
         answerGrid->gameFinish == true ? "true" : "false"
     );
-    return strdup(buffer);
+    return answerGrid->buffer;
 }

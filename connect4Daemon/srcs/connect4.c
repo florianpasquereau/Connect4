@@ -1,30 +1,33 @@
 #include "../incs/connect4.h"
 
-void                    initConnect4(t_connect4 *ret, uint32_t portReader, char *pathFileCertificat) {
+void                    initConnect4(t_connect4 *connect4, uint32_t portReader, char *pathFileCertificat) {
+    if (connect4 == NULL) {
+        return ;
+    }
     struct sockaddr_in  sin;
-    memset(ret, 0, sizeof(t_connect4));
-    ret->error = true;
-    ret->pathFileCertificat = pathFileCertificat;
-    if (access(ret->pathFileCertificat, F_OK) != 0) {
-        snprintf(ret->errorMsg, BUFFER_ERROR_SIZE, "Certificate '%s' is a directory or do not exist\n", ret->pathFileCertificat);
+    memset(connect4, 0, sizeof(t_connect4));
+    connect4->error = true;
+    connect4->pathFileCertificat = pathFileCertificat;
+    if (access(connect4->pathFileCertificat, F_OK) != 0) {
+        snprintf(connect4->errorMsg, BUFFER_ERROR_SIZE, "Certificate '%s' is a directory or do not exist\n", connect4->pathFileCertificat);
         return ;
     }
     initializeSSL();
-    if ((ret->socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
-        snprintf(ret->errorMsg, BUFFER_ERROR_SIZE, "Not possible to initialise socket %s %d\n", __FILE__, __LINE__);
+    if ((connect4->socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
+        snprintf(connect4->errorMsg, BUFFER_ERROR_SIZE, "Not possible to initialise socket %s %d\n", __FILE__, __LINE__);
         return ;
     }
-    fcntl(ret->socket, F_SETFL, O_NONBLOCK);
+    fcntl(connect4->socket, F_SETFL, O_NONBLOCK);
     sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     sin.sin_family = AF_INET;
     sin.sin_port = htons(portReader);
-    if (bind(ret->socket, (struct sockaddr *)&sin,sizeof(sin)) != 0) {
-        snprintf(ret->errorMsg, BUFFER_ERROR_SIZE, "Not possible bind the port(%u)\n", portReader);
-    } else if (listen(ret->socket, BACKLOG) != 0) {
-        snprintf(ret->errorMsg, BUFFER_ERROR_SIZE, "Not possible listen the socket\n");
+    if (bind(connect4->socket, (struct sockaddr *)&sin,sizeof(sin)) != 0) {
+        snprintf(connect4->errorMsg, BUFFER_ERROR_SIZE, "Not possible bind the port(%u)\n", portReader);
+    } else if (listen(connect4->socket, BACKLOG) != 0) {
+        snprintf(connect4->errorMsg, BUFFER_ERROR_SIZE, "Not possible listen the socket\n");
     } else {
-        ret->error = false;
-        ret->sizeCSin = sizeof(struct sockaddr_in);
+        connect4->error = false;
+        connect4->sizeCSin = sizeof(struct sockaddr_in);
         printf("Socket open on the port [%u]\n", portReader);
     }
 }
@@ -34,13 +37,13 @@ bool                    isValidConnect4(const t_connect4 *connect4) {
 }
 
 char*                   getErrorMsgConnect4(t_connect4 *connect4) {
-    if (connect4 == NULL) {
-        return "Memory full";
-    }
-    return connect4->errorMsg;
+    return (connect4 == NULL) ? "Memory full" : connect4->errorMsg;
 }
 
 void                    waitingForCliencConnect4(t_connect4 *connect4) {
+    if (connect4 == NULL) {
+        return ;
+    }
     if ((connect4->fd = accept(connect4->socket, (struct sockaddr*)&connect4->cSin, &connect4->sizeCSin)) > 0) {
         connect4->sslctx = SSL_CTX_new(TLS_method());
         SSL_CTX_set_options(connect4->sslctx, SSL_OP_SINGLE_DH_USE);
@@ -73,43 +76,50 @@ void                    closeConnect4(t_connect4 *connect4) {
     }
 }
 
-void                    manageData(t_connect4 *connect4) {
+bool                    manageData(t_connect4 *connect4) {
     
+    if (connect4 == NULL) {
+        return false;
+    }
     printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
-    readCurrentGrid(connect4);
-    sendIAGame(connect4);
+    if (readCurrentGrid(connect4)) {
+        return sendIAGame(connect4);
+    }
+    return false;
 }
 
-void                    readCurrentGrid(t_connect4 *connect4) {
+bool                    readCurrentGrid(t_connect4 *connect4) {
     int                 read;
     char                requestGrid[BUFFER_SIZE + 1];
 
-    if (connect4 != NULL) {
-        while ((read = SSL_read(connect4->cSSL, requestGrid, BUFFER_SIZE)) == BUFFER_SIZE) {
-            requestGrid[read] = '\0';
-        }
+    if (connect4 == NULL) {
+        return false; 
+    }
+    while ((read = SSL_read(connect4->cSSL, requestGrid, BUFFER_SIZE)) == BUFFER_SIZE) {
         requestGrid[read] = '\0';
     }
-    initGrid(&connect4->grid, requestGrid);
+    requestGrid[read] = '\0';
+    return initGrid(&connect4->grid, requestGrid);
 }
 
-void                    sendIAGame(t_connect4 *connect4) {
+bool                    sendIAGame(t_connect4 *connect4) {
     time_t              start_t, end_t;
     double              timeSpend;
     t_answerGrid        answerGrid;
     char                *answer;
 
-    if (connect4 != NULL) {
-        time(&start_t);
-        sleep(1);
-        time(&end_t);
-        timeSpend = difftime(end_t, start_t);
-        initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
-        answer = answerGridToJson(&answerGrid);
-        SSL_write(connect4->cSSL, answer, strlen(answer));
-        free(answer);
-        answer = NULL;
-        printGrid(&connect4->grid);
-        destructGrid(&connect4->grid);
-    }                
+    if (connect4 == NULL) {
+        return false;
+    }
+    time(&start_t);
+    sleep(1);
+    time(&end_t);
+    timeSpend = difftime(end_t, start_t);
+    initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
+    if ((answer = answerGridToJson(&answerGrid)) == NULL) {
+        return false;
+    }
+    SSL_write(connect4->cSSL, answer, strlen(answer));
+    printGrid(&connect4->grid);
+    return true;            
 }           

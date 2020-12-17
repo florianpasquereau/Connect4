@@ -3,6 +3,7 @@
 
 # include <stdlib.h>
 # include <stdio.h>
+# include <stdbool.h>
 
 typedef enum            value {
     EMPTY,
@@ -15,8 +16,8 @@ typedef struct          s_cell
     e_value             value;
 }                       t_cell;
 
-t_cell                  *cellFactory(int const cellValue);
 char                    *printCell(t_cell const *cell);
+bool                    cellSetValue(t_cell *cell, e_value value);
 
 
 #endif

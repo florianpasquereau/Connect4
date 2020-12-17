@@ -15,6 +15,7 @@ Requirements:
 - gcc
 - libssl
 - libcrypto
+- libjson-c
 - composer 2.*
 - php 7.4* or php 8.*
 

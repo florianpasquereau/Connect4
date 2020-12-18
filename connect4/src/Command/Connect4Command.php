@@ -3,7 +3,9 @@
 namespace App\Command;
 
 use App\Exception\Connect4Exception;
+use App\Exception\Connect4SeleniumException;
 use App\Service\Connect4;
+use App\Service\Selenium\Connect4Selenium;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -27,16 +29,22 @@ class Connect4Command extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws Connect4SeleniumException
      * @throws Connect4Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $gridPrev = null;
         $connect4 = new Connect4($input->getArgument('hostname'), $input->getArgument('port'), $input->getArgument('certificate'));
-        $connect4->send("Plop\n");
-        $connect4->send("Hello\n");
-        $connect4->send("Holla\n");
-        $connect4->send("Bonjour\n");
-        $connect4->send("Gutten tag\n");
+        $connect4Selenium = new Connect4Selenium();
+        $connect4Selenium->startParty('https://www.helpfulgames.com/subjects/brain-training/connect-four.html');
+        do {
+            $requestGrid = $connect4Selenium->buildRequestGrid($gridPrev);
+            $output->writeln($requestGrid->getGrid()->__toString());
+            $responseGrid = $connect4->send($requestGrid);
+            $connect4Selenium->putCoin($responseGrid);
+            $gridPrev = $requestGrid->getGrid();
+        } while(!$responseGrid->isGameFinish());
         return Command::SUCCESS;
     }
 }

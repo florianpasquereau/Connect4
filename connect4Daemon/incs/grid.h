@@ -20,8 +20,6 @@ typedef struct          s_grid
 }                       t_grid;
 
 bool                    initGrid(t_grid *grid, char const *requestGrid);
-// void                    destructGrid(t_grid *grid);
-bool                    initGridFromString(t_grid *grid, struct json_object *gridArray, e_value const iaColor, int const lastColumnPlayerCoin);
 void                    printGrid(t_grid const *grid);
 
 #endif

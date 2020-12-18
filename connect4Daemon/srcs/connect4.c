@@ -1,5 +1,55 @@
 #include "../incs/connect4.h"
 
+static bool                    sendIAGame(t_connect4 *connect4) {
+    time_t              start_t, end_t;
+    double              timeSpend;
+    t_answerGrid        answerGrid;
+    char                *answer;
+
+    if (connect4 == NULL) {
+        return false;
+    }
+    time(&start_t);
+    sleep(1);
+    time(&end_t);
+    timeSpend = difftime(end_t, start_t);
+    initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
+    if ((answer = answerGridToJson(&answerGrid)) == NULL) {
+        return false;
+    }
+    SSL_write(connect4->cSSL, answer, strlen(answer));
+    printGrid(&connect4->grid);
+    printf("LastColumnPlayerCoin = %d\n", connect4->grid.lastColumnPlayerCoin);
+    return true;            
+}
+
+
+static bool             readCurrentGrid(t_connect4 *connect4) {
+    int                 read;
+    char                requestGrid[BUFFER_SIZE + 1];
+
+    if (connect4 == NULL) {
+        return false; 
+    }
+    while ((read = SSL_read(connect4->cSSL, requestGrid, BUFFER_SIZE)) == BUFFER_SIZE) {
+        requestGrid[read] = '\0';
+    }
+    requestGrid[read] = '\0';
+    return initGrid(&connect4->grid, requestGrid);
+}
+
+static bool             manageData(t_connect4 *connect4) {
+    
+    if (connect4 == NULL) {
+        return false;
+    }
+    printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
+    if (readCurrentGrid(connect4)) {
+        return sendIAGame(connect4);
+    }
+    return false;
+}
+
 void                    initConnect4(t_connect4 *connect4, uint32_t portReader, char *pathFileCertificat) {
     if (connect4 == NULL) {
         return ;
@@ -74,53 +124,4 @@ void                    closeConnect4(t_connect4 *connect4) {
             printf("Socket closed\n");
         }
     }
-}
-
-bool                    manageData(t_connect4 *connect4) {
-    
-    if (connect4 == NULL) {
-        return false;
-    }
-    printf("\033[32mClient connected on the fd[%d]\n\033[0m", connect4->fd);
-    if (readCurrentGrid(connect4)) {
-        return sendIAGame(connect4);
-    }
-    return false;
-}
-
-bool                    readCurrentGrid(t_connect4 *connect4) {
-    int                 read;
-    char                requestGrid[BUFFER_SIZE + 1];
-
-    if (connect4 == NULL) {
-        return false; 
-    }
-    while ((read = SSL_read(connect4->cSSL, requestGrid, BUFFER_SIZE)) == BUFFER_SIZE) {
-        requestGrid[read] = '\0';
-    }
-    requestGrid[read] = '\0';
-    return initGrid(&connect4->grid, requestGrid);
-}
-
-bool                    sendIAGame(t_connect4 *connect4) {
-    time_t              start_t, end_t;
-    double              timeSpend;
-    t_answerGrid        answerGrid;
-    char                *answer;
-
-    if (connect4 == NULL) {
-        return false;
-    }
-    time(&start_t);
-    sleep(1);
-    time(&end_t);
-    timeSpend = difftime(end_t, start_t);
-    initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
-    if ((answer = answerGridToJson(&answerGrid)) == NULL) {
-        return false;
-    }
-    SSL_write(connect4->cSSL, answer, strlen(answer));
-    printGrid(&connect4->grid);
-    printf("LastColumnPlayerCoin = %d\n", connect4->grid.lastColumnPlayerCoin);
-    return true;            
-}           
+}         

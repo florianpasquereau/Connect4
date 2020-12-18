@@ -1,21 +1,6 @@
 #include "../incs/grid.h"
 
-bool                    initGrid(t_grid *grid, char const *requestGrid) {
-    if (grid == NULL || requestGrid == NULL) {
-        return false;
-    }
-    struct json_object  *requestParsed = json_tokener_parse(requestGrid);
-    struct json_object  *gridArray;
-    struct json_object  *colorIa;
-    struct json_object  *lastColumnPlayerCoin;
-
-    json_object_object_get_ex(requestParsed, "grid", &gridArray);
-    json_object_object_get_ex(requestParsed, "color_ia", &colorIa);
-    json_object_object_get_ex(requestParsed, "last_column_player_coin", &lastColumnPlayerCoin);
-    return initGridFromString(grid, gridArray, json_object_get_int(colorIa), json_object_get_int(lastColumnPlayerCoin));
-}
-
-bool                    initGridFromString(t_grid *grid, struct json_object *gridArray, e_value const iaColor, int const lastColumnPlayerCoin) {
+static bool             initGridFromString(t_grid *grid, struct json_object *gridArray, e_value const iaColor, int const lastColumnPlayerCoin) {
     struct json_object  *gridRow;
     size_t              x;
     struct json_object  *cellValue;
@@ -40,6 +25,21 @@ bool                    initGridFromString(t_grid *grid, struct json_object *gri
     grid->iaColor = iaColor;
     grid->lastColumnPlayerCoin = lastColumnPlayerCoin;
     return true;
+}
+
+bool                    initGrid(t_grid *grid, char const *requestGrid) {
+    if (grid == NULL || requestGrid == NULL) {
+        return false;
+    }
+    struct json_object  *requestParsed = json_tokener_parse(requestGrid);
+    struct json_object  *gridArray;
+    struct json_object  *colorIa;
+    struct json_object  *lastColumnPlayerCoin;
+
+    json_object_object_get_ex(requestParsed, "grid", &gridArray);
+    json_object_object_get_ex(requestParsed, "color_ia", &colorIa);
+    json_object_object_get_ex(requestParsed, "last_column_player_coin", &lastColumnPlayerCoin);
+    return initGridFromString(grid, gridArray, json_object_get_int(colorIa), json_object_get_int(lastColumnPlayerCoin));
 }
 
 void                    printGrid(t_grid const *grid)

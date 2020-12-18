@@ -2,6 +2,7 @@
 
 namespace App\Service\Selenium;
 
+use App\Exception\Connect4Exception;
 use App\Exception\Connect4SeleniumException;
 use App\Service\ExchangeConnect4\RequestGrid;
 use App\Service\ExchangeConnect4\ResponseGrid;
@@ -36,7 +37,12 @@ class Connect4Selenium {
         sleep(5);
     }
 
-    public function buildRequestGrid() : RequestGrid {
+    /**
+     * @param Grid|null $gridPrev
+     * @return RequestGrid
+     * @throws Connect4Exception
+     */
+    public function buildRequestGrid(?Grid $gridPrev) : RequestGrid {
         $grid = new Grid();
         $holes = $this->driver
             ->findElement(WebDriverBy::cssSelector('#gameBoard'))
@@ -51,9 +57,9 @@ class Connect4Selenium {
             $x = $ids[0];
             $y = $ids[1];
             $value = $this->getValueCell($child);
-            $grid->cetCell($y, $x, $value);
+            $grid->setCell($y, $x, $value);
         }
-        return new RequestGrid($grid, CellValue::RED);
+        return new RequestGrid($grid, CellValue::RED, $this->getLastColumnPlayerCoin($grid, $gridPrev, CellValue::YELLOW));
     }
 
     /**
@@ -76,7 +82,7 @@ class Connect4Selenium {
             return CellValue::EMPTY;
         }
         $player = explode(' ', $hole->getAttribute('class'));
-        if (count($player) === 2) {
+        if (count($player) >= 2) {
             $player = $player[1];
             if (preg_match('/player[0-1]$/', $player) === 1) {
                 $player = str_replace('player', '', $player);
@@ -85,5 +91,26 @@ class Connect4Selenium {
             }
         }
         return $player === '1' ? CellValue::YELLOW : CellValue::RED;
+    }
+
+    /**
+     * @param Grid $grid
+     * @param Grid|null $gridPrev
+     * @param int $colorPlayer
+     * @return int|null
+     * @throws Connect4Exception
+     */
+    private function getLastColumnPlayerCoin(Grid $grid, ?Grid $gridPrev, int $colorPlayer) : ?int {
+        if ($gridPrev !== null) {
+            for($y = 0;$y < Grid::HEIGHT; $y++) {
+                for($x = 0; $x < Grid::WIDTH; $x++) {
+                    if ($grid->getCell($y, $x)->getValue() === $colorPlayer &&
+                            $gridPrev->getCell($y, $x)->getValue() !== $grid->getCell($y, $x)->getValue()) {
+                        return $x;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service\Grid;
 
+use App\Exception\Connect4Exception;
 use App\Service\Grid\Cell\Cell;
 use App\Service\Stringable;
 
@@ -14,8 +15,34 @@ class Grid implements Stringable {
     */
     private array $grid = [];
 
-    public function cetCell(int $y, int $x, int $value) {
+    /**
+     * @param int $y
+     * @param int $x
+     * @param int $value
+     * @throws Connect4Exception
+     */
+    public function setCell(int $y, int $x, int $value) {
+        if ($y < 0 || $y >= Grid::HEIGHT) {
+            throw new Connect4Exception(sprintf("Not possible to access to the row '%s'", $y));
+        } else if ($x < 0 || $x >= Grid::WIDTH) {
+            throw new Connect4Exception(sprintf("Not possible to access to the column '%s'", $x));
+        }
         $this->grid[$y][$x] = new Cell($value);
+    }
+
+    /**
+     * @param int $y
+     * @param int $x
+     * @return Cell
+     * @throws Connect4Exception
+     */
+    public function getCell(int $y, int $x) : Cell{
+        if ($y < 0 || $y >= Grid::HEIGHT) {
+            throw new Connect4Exception(sprintf("Not possible to access to the row '%s'", $y));
+        } else if ($x < 0 || $x >= Grid::WIDTH) {
+            throw new Connect4Exception(sprintf("Not possible to access to the column '%s'", $x));
+        }
+        return $this->grid[$y][$x];
     }
 
     /**

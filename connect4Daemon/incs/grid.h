@@ -12,8 +12,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
+# include <string.h>
 
 # include "cell.h"
+# include "responseGrid.h"
 
 /**
  * grid.c
@@ -21,10 +23,11 @@
 
 typedef struct          s_grid
 {
-    t_cell              grid[GRID_HEIGHT][GRID_WIDTH];
-    e_value             iaColor;
-    unsigned int        lastColumnPlayerCoin; // 0xffffffff if NULL else 0 <-> (GRID_WIDTH - 1)
-    unsigned int        lastRowPlayerCoin;  // 0xffffffff if NULL else 0 <-> (GRID_HEIGHT- 1)
+    t_cell              grid[GRID_HEIGHT][GRID_WIDTH];  // grid
+    e_value             iaColor;                        // cell value of the ia coin
+    unsigned int        lastColumnPlayerCoin;           // 0xffffffff if NULL else 0 <-> (GRID_WIDTH - 1)
+    unsigned int        lastRowPlayerCoin;              // 0xffffffff if NULL else 0 <-> (GRID_HEIGHT- 1)
+    unsigned int        cellFilled;                     // count cell not empty
 }                       t_grid;
 
 bool                    initGrid(t_grid *grid, char const *requestGrid);
@@ -35,22 +38,8 @@ unsigned int const      *gridGetLastColumnPayerCoin(t_grid const *grid);
 unsigned int const      *gridGetLastRowPayerCoin(t_grid const *grid);
 
 /**
- * gridMinMaxCell.c
+ * gridScoring.c
 */
-// typedef struct          s_scoring
-// {
-//     int                 line;
-//     int                 column;
-//     int                 leftTopRightBottom;
-//     int                 rightTopLeftBottom;
-// }                       t_scoring;
-
-// typedef struct          s_scoringCell
-// {
-//     t_scoring           empty;
-//     t_scoring           count;
-// }                       t_scoringCell;
-
 int                     scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
 
 /**
@@ -61,5 +50,10 @@ unsigned int            countColumn(t_grid const *grid, unsigned int const y, un
 unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
 unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
 unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
+
+/**
+ * gridMinMax.c
+*/
+bool                    findColumnIaSelected(t_grid *grid, unsigned char *columnIaSelected, char *message);
 
 #endif

@@ -4,23 +4,28 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     time_t              start_t, end_t;
     double              timeSpend;
     t_answerGrid        answerGrid;
-    char                *answer;
+    char                *answer, message[BUFFER_SIZE_MESSAGE] = "Ok";
+    unsigned char       columnIaSelected;
+    bool                success;
 
     if (connect4 == NULL) {
         return false;
     }
     time(&start_t);
     sleep(1);
+    success = findColumnIaSelected(&connect4->grid, &columnIaSelected, message);
     time(&end_t);
     timeSpend = difftime(end_t, start_t);
     initAnswerGrid(&answerGrid, 
-        rand() % GRID_WIDTH, 
+        columnIaSelected, 
         timeSpend, 
         cellWinner(
             &connect4->grid,
             *gridGetLastRowPayerCoin(&connect4->grid), 
             *gridGetLastColumnPayerCoin(&connect4->grid)
-        )
+        ),
+        success,
+        message
     );
     if ((answer = answerGridToJson(&answerGrid)) == NULL) {
         return false;

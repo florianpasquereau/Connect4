@@ -19,6 +19,7 @@ static bool             initGridFromString(t_grid *grid, struct json_object *gri
     struct json_object  *gridRow;
     unsigned int        x;
     struct json_object  *cellValue;
+    e_value             value;
 
     if (grid == NULL || gridArray == NULL || json_object_array_length(gridArray) != GRID_HEIGHT) {
         return false;
@@ -32,9 +33,11 @@ static bool             initGridFromString(t_grid *grid, struct json_object *gri
         }
         for(x = 0; x < GRID_WIDTH; x++) {
             cellValue = json_object_array_get_idx(gridRow, x);
-            if (cellSetValue(&grid->grid[y][x], json_object_get_int(cellValue)) == false) {
+            value = json_object_get_int(cellValue);
+            if (cellSetValue((t_cell *)gridGetCell(grid, y, x), value) == false) {
                 return false;
             }
+            grid->cellFilled = value != EMPTY ? grid->cellFilled + 1 : grid->cellFilled;
         }
     }
     grid->iaColor = iaColor;
@@ -65,7 +68,7 @@ void                    printGrid(t_grid const *grid)
     if (grid != NULL) {
         for(unsigned int y = 0; y < GRID_HEIGHT; y++) {
             for (x = 0; x < GRID_WIDTH; x++){
-                printf("%s", printCell(&grid->grid[y][x]));
+                printf("%s", printCell(gridGetCell(grid, y, x)));
             }
             printf("\n");
         }

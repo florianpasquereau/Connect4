@@ -1,6 +1,6 @@
 NAME			= connect4_d
 
-SRC_NAME		= $(sort main.c connect4.c ssl.c responseGrid.c grid.c cell.c gridMinMaxCell.c gridAnalyzer.c)
+SRC_NAME		= $(sort main.c connect4.c ssl.c responseGrid.c grid.c cell.c gridScoring.c gridAnalyzer.c gridMinMax.c)
 
 INCLUDES		= connect4.h
 

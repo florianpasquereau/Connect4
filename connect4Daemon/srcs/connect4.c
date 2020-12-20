@@ -4,7 +4,7 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     time_t              start_t, end_t;
     double              timeSpend;
     t_answerGrid        answerGrid;
-    char                *answer, message[BUFFER_SIZE_MESSAGE] = "Ok";
+    char                *answer, message[BUFFER_SIZE_MESSAGE] = "???????";
     unsigned char       columnIaSelected;
     bool                success;
 
@@ -19,11 +19,7 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     initAnswerGrid(&answerGrid, 
         columnIaSelected, 
         timeSpend, 
-        cellWinner(
-            &connect4->grid,
-            *gridGetLastRowPayerCoin(&connect4->grid), 
-            *gridGetLastColumnPayerCoin(&connect4->grid)
-        ),
+        (*gridGetGameFinish(&connect4->grid)),
         success,
         message
     );

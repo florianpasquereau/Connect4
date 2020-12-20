@@ -10,6 +10,7 @@ void                    initAnswerGrid(t_answerGrid *answerGrid,
     if (answerGrid == NULL) {
         return ;
     }
+    memset(answerGrid, 0, sizeof(t_answerGrid));
     answerGrid->success = success;
     strncpy(answerGrid->message, message, BUFFER_SIZE_MESSAGE); 
     answerGrid->columnIaSelected = columnIaSelected;

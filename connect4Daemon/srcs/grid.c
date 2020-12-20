@@ -43,6 +43,13 @@ static bool             initGridFromString(t_grid *grid, struct json_object *gri
     grid->iaColor = iaColor;
     grid->lastColumnPlayerCoin = lastColumnPlayerCoin;
     grid->lastRowPlayerCoin = initGridLastRowPlayerCoin(grid);
+    grid->gameFinish = cellWinner(grid, *gridGetLastRowPayerCoin(grid), *gridGetLastColumnPayerCoin(grid));
+    printf("iaColor = %s\nlastColumnPlayerCoin = %u\nlastRowPlayerCoin = %u\ngameFinish = %s\n", 
+        iaColor == RED ? "RED" : "YELLOW", 
+        grid->lastColumnPlayerCoin, 
+        grid->lastRowPlayerCoin,
+        grid->gameFinish ? "true" : "false"
+    );
     return true;
 }
 
@@ -50,6 +57,7 @@ bool                    initGrid(t_grid *grid, char const *requestGrid) {
     if (grid == NULL || requestGrid == NULL) {
         return false;
     }
+    memset(grid, 0, sizeof(t_grid));
     struct json_object  *requestParsed = json_tokener_parse(requestGrid);
     struct json_object  *gridArray;
     struct json_object  *colorIa;
@@ -73,15 +81,6 @@ void                    printGrid(t_grid const *grid)
             printf("\n");
         }
     }
-    printf("grid[%u][%u] = %d\n", 
-        (*gridGetLastRowPayerCoin(grid)), 
-        (*gridGetLastColumnPayerCoin(grid)), 
-        scoringCell(
-            grid, 
-            (*gridGetLastRowPayerCoin(grid)), 
-            (*gridGetLastColumnPayerCoin(grid))
-        )
-    );
 }
 
 t_cell const            *gridGetCell(t_grid const *grid, unsigned int const y, unsigned int const x) {
@@ -114,3 +113,10 @@ unsigned int const      *gridGetLastRowPayerCoin(t_grid const *grid)
     }
     return &grid->lastRowPlayerCoin;
 }
+
+bool const              *gridGetGameFinish(t_grid const *grid) {
+    if (grid == NULL) {
+        return NULL;
+    }
+    return &grid->gameFinish;
+}               

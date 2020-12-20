@@ -47,6 +47,7 @@ class Connect4Command extends Command
             } else {
                 $connect4Selenium->putCoin($responseGrid);
                 $gridPrev = $requestGrid->getGrid();
+                $output->writeln($responseGrid->getMessage() . " . message");
             }
         } while(!$responseGrid->isGameFinish());
         return Command::SUCCESS;

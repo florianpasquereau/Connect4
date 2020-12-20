@@ -28,6 +28,7 @@ typedef struct          s_grid
     unsigned int        lastColumnPlayerCoin;           // 0xffffffff if NULL else 0 <-> (GRID_WIDTH - 1)
     unsigned int        lastRowPlayerCoin;              // 0xffffffff if NULL else 0 <-> (GRID_HEIGHT- 1)
     unsigned int        cellFilled;                     // count cell not empty
+    bool                gameFinish;                     // true if the game is finish else false
 }                       t_grid;
 
 bool                    initGrid(t_grid *grid, char const *requestGrid);
@@ -36,6 +37,7 @@ t_cell const            *gridGetCell(t_grid const *grid, unsigned int const y, u
 e_value const           *gridGetAiColor(t_grid const *grid);
 unsigned int const      *gridGetLastColumnPayerCoin(t_grid const *grid);
 unsigned int const      *gridGetLastRowPayerCoin(t_grid const *grid);
+bool const              *gridGetGameFinish(t_grid const *grid) ;
 
 /**
  * gridScoring.c

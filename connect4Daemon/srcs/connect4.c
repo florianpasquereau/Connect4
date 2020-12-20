@@ -13,7 +13,15 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     sleep(1);
     time(&end_t);
     timeSpend = difftime(end_t, start_t);
-    initAnswerGrid(&answerGrid, rand() % GRID_WIDTH, timeSpend, false);
+    initAnswerGrid(&answerGrid, 
+        rand() % GRID_WIDTH, 
+        timeSpend, 
+        cellWinner(
+            &connect4->grid,
+            *gridGetLastRowPayerCoin(&connect4->grid), 
+            *gridGetLastColumnPayerCoin(&connect4->grid)
+        )
+    );
     if ((answer = answerGridToJson(&answerGrid)) == NULL) {
         return false;
     }

@@ -16,6 +16,9 @@ class ResponseGrid
      * @throws Connect4Exception
      */
     public function __construct(string $objJson) {
+        if (empty($objJson)) {
+            throw new Connect4Exception("ResponseGrid is empty");
+        }
         $mappingKeys = [
             "column_ia_selected" => "columnIaSelected",
             "time_spend" => "timeSpend",
@@ -30,7 +33,6 @@ class ResponseGrid
             $value = $answerGrid->$key;
             $this->$dest = $value;
         }
-        dump($this);
     }
 
     /**

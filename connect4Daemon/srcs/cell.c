@@ -23,3 +23,11 @@ char                    *printCell(t_cell const *cell)
             return " .";
     }
 }
+
+e_value const           *cellgetValue(t_cell const *cell)
+{
+    if (cell == NULL) {
+        return NULL;
+    }
+    return &cell->value;
+}

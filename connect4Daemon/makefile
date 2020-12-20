@@ -1,6 +1,6 @@
 NAME			= connect4_d
 
-SRC_NAME		= $(sort main.c connect4.c ssl.c responseGrid.c grid.c cell.c)
+SRC_NAME		= $(sort main.c connect4.c ssl.c responseGrid.c grid.c cell.c gridMinMaxCell.c gridAnalyzer.c)
 
 INCLUDES		= connect4.h
 
@@ -11,7 +11,7 @@ OTHERS			= libft Makefile auteur
 OTHER_FLAGS 	=
 
 GCC				= gcc
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -O3
 
 OBJ_NAME		= $(SRC_NAME:.c=.o)
 

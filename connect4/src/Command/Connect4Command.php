@@ -43,11 +43,11 @@ class Connect4Command extends Command
             $output->writeln($requestGrid->getGrid()->__toString());
             $responseGrid = $connect4->send($requestGrid);
             if (!$responseGrid->isSuccess())  {
-                $output->writeln('<fg=red>' . $responseGrid->getMessage() . '</>');
+                $output->writeln('<fg=red>' . $responseGrid->getMessage() . '</>\n');
             } else {
                 $connect4Selenium->putCoin($responseGrid);
                 $gridPrev = $requestGrid->getGrid();
-                $output->writeln($responseGrid->getMessage() . " . message");
+                $output->writeln(sprintf("IA play column : %d -> %s\n", $responseGrid->getColumnIaSelected(), $responseGrid->getMessage()));
             }
         } while(!$responseGrid->isGameFinish());
         return Command::SUCCESS;

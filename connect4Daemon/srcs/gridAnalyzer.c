@@ -1,71 +1,55 @@
 #include "../incs/grid.h"
 
-static unsigned int     countCoin(t_grid const *grid, 
-    unsigned int const y, 
-    unsigned int const x,
-    e_value const *cellBaseValue,
-    unsigned int const count,
-    unsigned int (*f)(
-        t_grid const *,
-        unsigned int const,
-        unsigned int const,
-        e_value const *,
-        unsigned int const
-    ) 
-)
+static t_counterCoin    *countLineLeft(t_counterCoin *counter)
 {
-    t_cell const        *cell;
-
-    if (count >= COIN_SEARCH_LENGTH ||                              //if atleast 4 coins are aligned 
-            cellBaseValue == NULL ||                                //if cellBaseValue is null
-            (cell = gridGetCell(grid, y, x)) == NULL ||             //if cell is outside of the grid range
-            (*cellgetValue(cell)) != (*cellBaseValue)) {            //if cellChecked do not have the same value than the base cell
-        return count;
-    }
-    return f(grid, y, x, cellBaseValue, count + 1);
+    counter->x--;
+    return countCoin(counter);
 }
 
-
-
-
-
-
-
-
-static unsigned int     countLineLeft(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countLineRight(t_counterCoin *counter)
 {
-    return countCoin(grid, y, x - 1, cellBaseValue, count, countLineLeft);
-
+    counter->x++;
+    return countCoin(counter);
 }
 
-static unsigned int     countLineRight(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countTop(t_counterCoin *counter)
 {
-    return countCoin(grid, y, x + 1, cellBaseValue, count, countLineRight);
+    counter->y--;
+    return countCoin(counter);
 }
 
-static unsigned int     countBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countBottom(t_counterCoin *counter)
 {
-    return countCoin(grid, y + 1, x, cellBaseValue, count, countBottom);
+    counter->y++;
+    return countCoin(counter);
 }
 
-static unsigned int     countLeftTop(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countLeftTop(t_counterCoin *counter)
 {
-    return countCoin(grid, y - 1, x - 1, cellBaseValue, count, countLeftTop);
+    counter->y--;
+    counter->x--;
+    return countCoin(counter);
 }
 
-static unsigned int     countRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countRightBottom(t_counterCoin *counter)
 {
-    return countCoin(grid, y + 1, x + 1, cellBaseValue, count, countRightBottom);
+    counter->y++;
+    counter->x++;
+    return countCoin(counter);
 }
 
-static unsigned int     countRightTop(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countRightTop(t_counterCoin *counter)
 {
-    return countCoin(grid, y - 1, x + 1, cellBaseValue, count, countRightTop);
+    counter->y--;
+    counter->x++;
+    return countCoin(counter);
 }
 
-static unsigned int     countLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellBaseValue, unsigned int const count)
+static t_counterCoin    *countLeftBottom(t_counterCoin *counter)
 {
-    return countCoin(grid, y + 1, x - 1, cellBaseValue, count, countLeftBottom);
+    counter->y++;
+    counter->x--;
+    return countCoin(counter);
 }
 
 
@@ -76,53 +60,72 @@ static unsigned int     countLeftBottom(t_grid const *grid, unsigned int const y
 
 bool                    cellWinner(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
+    unsigned int        valueEnd = (0x8 << GRID_WIDTH);
     e_value const       *cellValue = cellgetValue(gridGetCell(grid, y, x));
     if (cellValue == NULL || cellValue == EMPTY) {
         false;
     }
     printf("grid[%u][%u]\n", y, x);
-    printf("countColumn : %x\n", countColumn(grid, y, x, cellValue));
-    printf("countLine : %x\n", countLine(grid, y, x, cellValue));
-    printf("countRightTopLeftBottom : %x\n", countRightTopLeftBottom(grid, y, x, cellValue));
-    printf("countLeftTopRightBottom : %x\n", countLeftTopRightBottom(grid, y, x, cellValue));
-    return (countColumn(grid, y, x, cellValue) ^ 0x8) == 0 || 
-        (countLine(grid, y, x, cellValue) ^ 0x8) == 0 || 
-        (countRightTopLeftBottom(grid, y, x, cellValue) ^ 0x8) == 0 || 
-        (countLeftTopRightBottom(grid, y, x, cellValue) ^ 0x8) == 0;
+    printf("countColumn : %x\n", countColumn(grid, y, x));
+    printf("countLine : %x\n", countLine(grid, y, x));
+    printf("countRightTopLeftBottom : %x\n", countRightTopLeftBottom(grid, y, x));
+    printf("countLeftTopRightBottom : %x\n", countLeftTopRightBottom(grid, y, x));
+    return (countColumn(grid, y, x) ^ valueEnd) == 0 || 
+        (countLine(grid, y, x) ^ valueEnd) == 0 || 
+        (countRightTopLeftBottom(grid, y, x) ^ valueEnd) == 0 || 
+        (countLeftTopRightBottom(grid, y, x) ^ valueEnd) == 0;
 
 }
 
 
-unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue)
+unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    unsigned int        ret = 1;
+    t_counterCoin       counterBottom;
+    t_counterCoin       counterTop;
 
-    return ret << countBottom(grid, y, x, cellValue, 0);
+    initCounterCoin(&counterBottom, grid,y, x, countBottom);
+    initCounterCoin(&counterTop, grid,y, x, countTop);
+    return addAndbuildScoreFromCointerCoin(countBottom(&counterBottom), countTop(&counterTop));
 }
 
-unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue)
+unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    unsigned int        ret = 1;
+    /**
+     * unsigned int        countEmpty;
+    unsigned int        countCoin;
+    unsigned int        loop;
+    e_value             cellValueExpected;
+    t_grid const        *grid;
+    unsigned int        y;
+    unsigned int        x;
+    */
+    t_counterCoin       counter;
 
-    ret = ret << countLineLeft(grid, y, x, cellValue, 0);
-    ret = ret << countLineRight(grid, y, x, cellValue, 0);
-    return ret;
+    initCounterCoin(&counter, grid,y, x, countLineLeft);
+    countLineLeft(&counter);
+    counter.f = countLineRight;
+    counter.x = x;
+    counter.y = y;
+    countLineRight(&counter);
+    return buildScoreFromCointerCoin(&counter);
 }
 
-unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue)
+unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    unsigned int        ret = 1;
+    t_counterCoin       counterLeftTop;
+    t_counterCoin       counterRightBottom;
 
-    ret = ret << countLeftTop(grid, y, x, cellValue, 0);
-    ret = ret << countRightBottom(grid, y, x, cellValue, 0);
-    return ret;
+    initCounterCoin(&counterLeftTop, grid,y, x, countLeftTop);
+    initCounterCoin(&counterRightBottom, grid,y, x, countRightBottom);
+    return counterLeftTop.countCoin | counterRightBottom.countCoin | counterLeftTop.countEmpty | counterRightBottom.countEmpty;
 }
 
-unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue)
+unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    unsigned int        ret = 1;
+    t_counterCoin       counterLeftBottom;
+    t_counterCoin       counterRightTop;
 
-    ret = ret << countLeftBottom(grid, y, x, cellValue, 0);
-    ret = ret << countRightTop(grid, y, x, cellValue, 0);
-    return ret;
+    initCounterCoin(&counterLeftBottom, grid,y, x, countLeftBottom);
+    initCounterCoin(&counterRightTop, grid,y, x, countRightTop);
+    return counterLeftBottom.countCoin | counterRightTop.countCoin | counterLeftBottom.countEmpty | counterRightTop.countEmpty;
 }

@@ -5,7 +5,7 @@
 # define GRID_WIDTH 7u
 # define COUNT_LEFT_SHIFT GRID_WIDTH
 # define COIN_LENGTH_END_GAME 4u
-# define COIN_SEARCH_LENGTH COIN_LENGTH_END_GAME - 1
+# define COIN_SEARCH_LENGTH COIN_LENGTH_END_GAME - 1u
 
 # include <json-c/json.h>
 # include <stdlib.h>
@@ -40,6 +40,27 @@ unsigned int const      *gridGetLastRowPayerCoin(t_grid const *grid);
 bool const              *gridGetGameFinish(t_grid const *grid) ;
 
 /**
+ * gridCountCoin.c
+*/
+typedef struct          s_counterCoin
+{
+    unsigned int        countEmpty;
+    unsigned int        countCoin;
+    unsigned int        loop;
+    e_value             cellValueExpected;
+    t_grid const        *grid;
+    unsigned int        y;
+    unsigned int        x;
+    struct s_counterCoin *
+                        (*f)(struct s_counterCoin *);
+}                       t_counterCoin;
+
+bool                    initCounterCoin(t_counterCoin *counterCoin,t_grid const *grid, unsigned int const y, unsigned int const x, t_counterCoin *(*f)(t_counterCoin *));
+t_counterCoin           *countCoin(t_counterCoin *counter);
+unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter);
+unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2);
+
+/**
  * gridScoring.c
 */
 int                     scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
@@ -48,10 +69,10 @@ int                     scoringCell(t_grid const *grid, unsigned int const y, un
  * gridAnalyse.c
 */
 bool                    cellWinner(t_grid const *grid, unsigned int const y, unsigned int const x);
-unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
-unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
-unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
-unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x, e_value const *cellValue);
+unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x);
+unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x);
+unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
+unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
 
 /**
  * gridMinMax.c

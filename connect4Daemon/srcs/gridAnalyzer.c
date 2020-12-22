@@ -104,6 +104,7 @@ unsigned int            countLine(t_grid const *grid, unsigned int const y, unsi
     initCounterCoin(&counter, grid,y, x, countLineLeft);
     countLineLeft(&counter);
     counter.f = countLineRight;
+    counter.loop = 0;
     counter.x = x;
     counter.y = y;
     countLineRight(&counter);

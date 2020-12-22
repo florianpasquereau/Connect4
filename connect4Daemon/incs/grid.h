@@ -46,8 +46,7 @@ typedef struct          s_counterCoin
 {
     unsigned int        countEmpty;
     unsigned int        countCoin;
-    unsigned int        loopEmpty;
-    unsigned int        loopCoin;
+    unsigned int        loop;
     e_value             cellValueExpected;
     t_grid const        *grid;
     unsigned int        y;

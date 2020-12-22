@@ -35,22 +35,18 @@ t_counterCoin           *countCoin(t_counterCoin *counter)
     e_value const       *cellValue;
 
     if (counter == NULL || 
-            counter->loopCoin >= COIN_SEARCH_LENGTH ||                                              //if atleast 4 coins are aligned 
+            counter->loop >= COIN_SEARCH_LENGTH ||                                              //if atleast 4 coins are aligned 
             (cell = gridGetCell(counter->grid, counter->y, counter->x)) == NULL) {              //if cell is outside of the grid range
         return counter;
     }
     if ((*(cellValue = cellgetValue(cell))) == counter->cellValueExpected) {
         counter->countCoin = counter->countCoin << 1;
-        counter->loopCoin++;
     } else if ((*cellValue) == EMPTY) {
-        if ((counter->loopEmpty + counter->loopCoin) < COIN_SEARCH_LENGTH) {
-            counter->countEmpty = counter->countEmpty << 1;
-            counter->loopEmpty++;
-        }
-        // counter->countEmpty = (counter->loopEmpty++ + counter->loopCoin) < COIN_SEARCH_LENGTH ?  : counter->countEmpty;
+        counter->countEmpty = counter->countEmpty << 1;
     } else {
         return counter;
     }
+    counter->loop++;
     return counter->f(counter);
 }
 

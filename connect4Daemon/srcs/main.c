@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <signal.h>
 
-# define TEST_MODE true
+# define TEST_MODE false
 
 #if TEST_MODE
     #include "../incs/testMode.h"

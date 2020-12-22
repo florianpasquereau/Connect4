@@ -28,7 +28,6 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     }
     SSL_write(connect4->cSSL, answer, strlen(answer));
     printGrid(&connect4->grid);
-    printf("LastColumnPlayerCoin = %d\n", connect4->grid.lastColumnPlayerCoin);
     return true;            
 }
 

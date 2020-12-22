@@ -131,6 +131,17 @@ unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int
 
 unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
+    t_counterCoin       counter;
+
+    initCounterCoin(&counter, grid,y, x, countRightTop);
+    countRightTop(&counter);
+    counter.f = countLeftBottom;
+    counter.loop = 0;
+    counter.x = x;
+    counter.y = y;
+    countLeftBottom(&counter);
+    return buildScoreFromCointerCoin(&counter);
+
     t_counterCoin       counterLeftBottom;
     t_counterCoin       counterRightTop;
 

@@ -1,7 +1,7 @@
 #ifndef TEST_MODE_H
 # define TEST_MODE_H
 
-# define MAX_BUFFER_TEST_SIZE 1000000
+# define MAX_BUFFER_TEST_SIZE 10000
 # define BUFFER_ERROR_SIZE 100
 
 # include <json-c/json.h>

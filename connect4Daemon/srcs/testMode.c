@@ -122,20 +122,17 @@ static bool             executeTest(struct json_object  *test) {
     return true;
 }
 
-int                     testMode(int argc, char **argv)
-{
+static int              readFile(int const index, char **argv) {
     FILE                *fd;
     char                buffer[MAX_BUFFER_TEST_SIZE];
     size_t              lengthRead, numberTests;
     struct json_object  *testParser, *tests;
 
-
-    if (argc != 2) {
-        helper(argv);
-    } else if ((fd = fopen(argv[1], "r")) == NULL) {
-        fprintf(stderr, "Not possible to open : %s\n", argv[1]);
+    if ((fd = fopen(argv[index], "r")) == NULL) {
+        fprintf(stderr, "Not possible to open : %s\n", argv[index]);
         helper(argv);
     }
+    fprintf(stdout, "Reading : '%s'\n", argv[index]) ;
     lengthRead = fread(buffer, 1, MAX_BUFFER_TEST_SIZE - 1, fd);
     buffer[lengthRead] = '\0';
     testParser = json_tokener_parse(buffer);
@@ -144,7 +141,17 @@ int                     testMode(int argc, char **argv)
     for(size_t i = 0; i < numberTests; i++) {
         executeTest(json_object_array_get_idx(tests, i));
     }
-    // printf("%s\nNumber Tests = %lu", buffer, numberTests);
     fclose(fd);
+    return 1;
+}
+
+int                     testMode(int argc, char **argv)
+{
+    if (argc < 2) {
+        helper(argv);
+    } 
+    for(int i = 1; i < argc; i++) {
+        readFile(i, argv);
+    }
     return EXIT_SUCCESS;
 }

@@ -1,0 +1,224 @@
+{
+    "tests" : [
+        {
+            "name":"LeftTopRightBottom",
+            "tests": [
+                {
+                    "grid" : [
+                        [0,0,0,0,2,0,0],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":2,"x":6},
+                    "countLine":136,
+                    "countColumn":160,
+                    "countLeftTopRightBottom":513,
+                    "countRightTopLeftBottom":136
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,2,0,0],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":1,"x":5},
+                    "countLine":144,
+                    "countColumn":144,
+                    "countLeftTopRightBottom":513,
+                    "countRightTopLeftBottom":144
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,2,0,0],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":0,"x":4},
+                    "countLine":160,
+                    "countColumn":136,
+                    "countLeftTopRightBottom":513,
+                    "countRightTopLeftBottom":136
+                },
+                {
+                    "grid" : [
+                        [0,0,0,2,2,0,0],
+                        [0,0,0,0,2,2,0],
+                        [0,0,0,0,0,2,2],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 7,
+                    "coinAnalyse":{"y":0,"x":3},
+                    "countLine":288,
+                    "countColumn":136,
+                    "countLeftTopRightBottom":1025,
+                    "countRightTopLeftBottom":136
+                },
+                {
+                    "grid" : [
+                        [0,0,0,2,2,0,0],
+                        [0,0,0,0,2,2,0],
+                        [0,0,0,0,0,2,2],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 7,
+                    "coinAnalyse":{"y":2,"x":5},
+                    "countLine":264,
+                    "countColumn":272,
+                    "countLeftTopRightBottom":1025,
+                    "countRightTopLeftBottom":144
+                },
+                {
+                    "grid" : [
+                        [0,0,0,2,1,0,0],
+                        [0,0,0,0,2,1,0],
+                        [0,0,0,0,0,2,1],
+                        [0,0,0,0,0,0,1],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 7,
+                    "coinAnalyse":{"y":2,"x":5},
+                    "countLine":136,
+                    "countColumn":136,
+                    "countLeftTopRightBottom":513,
+                    "countRightTopLeftBottom":144
+                },
+                {
+                    "grid" : [
+                        [0,0,0,2,1,0,0],
+                        [0,0,0,0,1,1,1],
+                        [0,0,0,0,1,2,1],
+                        [0,0,0,0,1,1,1],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 11,
+                    "coinAnalyse":{"y":2,"x":5},
+                    "countLine":129,
+                    "countColumn":129,
+                    "countLeftTopRightBottom":129,
+                    "countRightTopLeftBottom":129
+                }
+            ]
+        },
+        {
+            "name":"RightTopLeftBottom",
+            "tests": [
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,2,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":3,"x":6},
+                    "countLine":136,
+                    "countColumn":160,
+                    "countLeftTopRightBottom":136,
+                    "countRightTopLeftBottom":513
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,2,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":4,"x":5},
+                    "countLine":144,
+                    "countColumn":144,
+                    "countLeftTopRightBottom":144,
+                    "countRightTopLeftBottom":513
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,2],
+                        [0,0,0,0,0,2,0],
+                        [0,0,0,0,2,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":5,"x":4},
+                    "countLine":160,
+                    "countColumn":136,
+                    "countLeftTopRightBottom":136,
+                    "countRightTopLeftBottom":513
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,1],
+                        [0,0,0,0,0,1,2],
+                        [0,0,0,0,1,2,0],
+                        [0,0,0,1,2,0,0]
+                    ],
+                    "cellFilledCounter": 7,
+                    "coinAnalyse":{"y":5,"x":3},
+                    "countLine":136,
+                    "countColumn":136,
+                    "countLeftTopRightBottom":136,
+                    "countRightTopLeftBottom":1025
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,1],
+                        [0,0,0,0,0,1,2],
+                        [0,0,0,0,1,2,0],
+                        [0,0,0,1,2,0,0]
+                    ],
+                    "cellFilledCounter": 7,
+                    "coinAnalyse":{"y":2,"x":6},
+                    "countLine":136,
+                    "countColumn":132,
+                    "countLeftTopRightBottom":132,
+                    "countRightTopLeftBottom":1025
+                }
+                ,
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,1,0,0],
+                        [0,0,0,1,0,0,1],
+                        [0,0,1,0,0,1,2],
+                        [0,1,0,0,1,2,0],
+                        [0,0,0,1,2,0,0]
+                    ],
+                    "cellFilledCounter": 11,
+                    "coinAnalyse":{"y":2,"x":3},
+                    "countLine":288,
+                    "countColumn":272,
+                    "countLeftTopRightBottom":136,
+                    "countRightTopLeftBottom":1028
+                }
+            ]
+        }
+    ]
+    
+}

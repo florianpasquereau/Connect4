@@ -58,7 +58,7 @@ typedef struct          s_counterCoin
 bool                    initCounterCoin(t_counterCoin *counterCoin,t_grid const *grid, unsigned int const y, unsigned int const x, t_counterCoin *(*f)(t_counterCoin *));
 t_counterCoin           *countCoin(t_counterCoin *counter);
 unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter);
-unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2);
+// unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2);
 
 /**
  * gridScoring.c

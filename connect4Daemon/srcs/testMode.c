@@ -77,12 +77,23 @@ static bool             compareJsonToData(t_testNode *testNode) {
     unsigned int        counter;
 
     if (testNode->grid.cellFilled != testNode->cellFilledCounter) {
-        snprintf(testNode->bufferError, BUFFER_ERROR_SIZE, "Test [%u] : Grid.cellField == \033[31m%u\033[0m expected : \033[31m%u\033[0m\n", testNode->iTest, testNode->grid.cellFilled, testNode->cellFilledCounter);
-        perror(testNode->bufferError);
+        fprintf(stderr, "Test[%3u] : Grid.cellField == \033[31m%u\033[0m expected : \033[31m%u\033[0m\n", testNode->iTest, testNode->grid.cellFilled, testNode->cellFilledCounter);
         ret = false;
-    } else if ((counter = countLine(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countLine) {
-        snprintf(testNode->bufferError, BUFFER_ERROR_SIZE, "Test [%u] : countLine == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countLine);
-        perror(testNode->bufferError);
+    }
+    if ((counter = countLine(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countLine) {
+        fprintf(stderr, "Test[%3u] : countLine == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countLine);
+        ret = false;
+    }
+    if ((counter = countColumn(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countColumn) {
+        fprintf(stderr, "Test[%3u] : countColumn == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countColumn);
+        ret = false;
+    }
+    if ((counter = countLeftTopRightBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countLeftTopRightBottom) {
+        fprintf(stderr, "Test[%3u] : countLeftTopRightBottom == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countLeftTopRightBottom);
+        ret = false;
+    }
+    if ((counter = countRightTopLeftBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countRightTopLeftBottom) {
+        fprintf(stderr, "Test[%3u] : countRightTopLeftBottom == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countRightTopLeftBottom);
         ret = false;
     }
     return ret;
@@ -92,11 +103,10 @@ static bool             executeTestLoop(struct json_object *test, unsigned int i
     t_testNode          testNode;
 
     if (test == NULL) {
-        perror("TestLoop is NULL\n");
+        fprintf(stderr, "TestLoop is NULL\n");
     }
     if (!initTestNode(test, &testNode, iTest)) {
-        snprintf(testNode.bufferError, BUFFER_ERROR_SIZE, "Not possible to initGrid test[%d]\n", testNode.iTest);
-        perror(testNode.bufferError);
+        fprintf(stderr, "Not possible to initGrid test[%d]\n", testNode.iTest);
     } else {
         return compareJsonToData(&testNode);
     }
@@ -116,7 +126,9 @@ static bool             executeTest(struct json_object  *test) {
     numberTests = json_object_array_length(tests);
     fprintf(stdout, "Starting : '%s' with %5lu test(s)\n", json_object_get_string(name), numberTests) ;
     for(size_t i = 0; i < numberTests; i++) {
-        executeTestLoop(json_object_array_get_idx(tests, i), i);
+        if (executeTestLoop(json_object_array_get_idx(tests, i), i)) {
+            fprintf(stdout, "Test[%3lu] : \033[32mok\033[0m\n", i + 1) ;
+        }
     }
     fprintf(stdout, "End : '%s'\n", json_object_get_string(name)) ;
     return true;

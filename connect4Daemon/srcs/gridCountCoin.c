@@ -56,18 +56,17 @@ unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter)
         return 0x80000000;
     }
     return (counter->countCoin << GRID_WIDTH) + counter->countEmpty;
-    return (counter->countCoin | counter->countEmpty) == 0xf ? (counter->countCoin << GRID_WIDTH) + counter->countEmpty : counter->countEmpty;
 }
 
-unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2)
-{
-    unsigned int        countCoin, countEmpty;
+// unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2)
+// {
+//     unsigned int        countCoin, countEmpty;
 
-    if (counter1 == NULL || counter2 == NULL) {
-        return 0x80000000;
-    }
-    countCoin = counter1->countCoin | counter2->countCoin;
-    countEmpty = counter1->countEmpty | counter2->countEmpty;
+//     if (counter1 == NULL || counter2 == NULL) {
+//         return 0x80000000;
+//     }
+//     countCoin = counter1->countCoin | counter2->countCoin;
+//     countEmpty = counter1->countEmpty | counter2->countEmpty;
 
-    return (countCoin & countEmpty) == 0xf ? (countCoin << GRID_WIDTH) + countEmpty : countEmpty;
-}
+//     return (countCoin & countEmpty) == 0xf ? (countCoin << GRID_WIDTH) + countEmpty : countEmpty;
+// }

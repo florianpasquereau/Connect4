@@ -80,12 +80,16 @@ bool                    cellWinner(t_grid const *grid, unsigned int const y, uns
 
 unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    t_counterCoin       counterBottom;
-    t_counterCoin       counterTop;
+    t_counterCoin       counter;
 
-    initCounterCoin(&counterBottom, grid,y, x, countBottom);
-    initCounterCoin(&counterTop, grid,y, x, countTop);
-    return addAndbuildScoreFromCointerCoin(countBottom(&counterBottom), countTop(&counterTop));
+    initCounterCoin(&counter, grid,y, x, countBottom);
+    countBottom(&counter);
+    counter.f = countTop;
+    counter.loop = 0;
+    counter.x = x;
+    counter.y = y;
+    countTop(&counter);
+    return buildScoreFromCointerCoin(&counter);
 }
 
 unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x)
@@ -113,12 +117,16 @@ unsigned int            countLine(t_grid const *grid, unsigned int const y, unsi
 
 unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x)
 {
-    t_counterCoin       counterLeftTop;
-    t_counterCoin       counterRightBottom;
+    t_counterCoin       counter;
 
-    initCounterCoin(&counterLeftTop, grid,y, x, countLeftTop);
-    initCounterCoin(&counterRightBottom, grid,y, x, countRightBottom);
-    return counterLeftTop.countCoin | counterRightBottom.countCoin | counterLeftTop.countEmpty | counterRightBottom.countEmpty;
+    initCounterCoin(&counter, grid,y, x, countLeftTop);
+    countLeftTop(&counter);
+    counter.f = countRightBottom;
+    counter.loop = 0;
+    counter.x = x;
+    counter.y = y;
+    countRightBottom(&counter);
+    return buildScoreFromCointerCoin(&counter);
 }
 
 unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x)

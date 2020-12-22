@@ -81,7 +81,7 @@
                     "countLine":136,
                     "countColumn":136,
                     "countLeftTopRightBottom":136,
-                    "countRightTopLeftBottom":129
+                    "countRightTopLeftBottom":2
                 },
                 {
                     "grid" : [
@@ -97,7 +97,7 @@
                     "countLine":264,
                     "countColumn":136,
                     "countLeftTopRightBottom":136,
-                    "countRightTopLeftBottom":130
+                    "countRightTopLeftBottom":3
                 },
                 {
                     "grid" : [
@@ -112,7 +112,7 @@
                     "coinAnalyse":{"y":5,"x":2},
                     "countLine":272,
                     "countColumn":136,
-                    "countLeftTopRightBottom":132,
+                    "countLeftTopRightBottom":5,
                     "countRightTopLeftBottom":136
                 },
                 {
@@ -128,7 +128,7 @@
                     "coinAnalyse":{"y":5,"x":0},
                     "countLine":136,
                     "countColumn":136,
-                    "countLeftTopRightBottom":129,
+                    "countLeftTopRightBottom":2,
                     "countRightTopLeftBottom":136
                 } 
             ]
@@ -181,7 +181,7 @@
                     "coinAnalyse":{"y":5,"x":2},
                     "countLine":160,
                     "countColumn":514,
-                    "countLeftTopRightBottom":132,
+                    "countLeftTopRightBottom":5,
                     "countRightTopLeftBottom":136
                 },
                 {
@@ -212,7 +212,7 @@
                     "cellFilledCounter": 4,
                     "coinAnalyse":{"y":2,"x":2},
                     "countLine":160,
-                    "countColumn":132,
+                    "countColumn":5,
                     "countLeftTopRightBottom":160,
                     "countRightTopLeftBottom":144
                 },
@@ -245,7 +245,7 @@
                     "coinAnalyse":{"y":5,"x":0},
                     "countLine":136,
                     "countColumn":136,
-                    "countLeftTopRightBottom":129,
+                    "countLeftTopRightBottom":2,
                     "countRightTopLeftBottom":136
                 },
                 {
@@ -260,8 +260,8 @@
                     "cellFilledCounter": 2,
                     "coinAnalyse":{"y":5,"x":0},
                     "countLine":136,
-                    "countColumn":129,
-                    "countLeftTopRightBottom":129,
+                    "countColumn":2,
+                    "countLeftTopRightBottom":2,
                     "countRightTopLeftBottom":136
                 }
             ]

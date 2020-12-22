@@ -52,9 +52,20 @@ t_counterCoin           *countCoin(t_counterCoin *counter)
 
 unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter)
 {
+    unsigned int        i;
+    unsigned int        tmp;
+
     if (counter == NULL) {
         return 0x80000000;
     }
+    for(i = 1, tmp = counter->countEmpty; tmp > 1; i++) {
+        tmp = tmp >> 1;
+    }
+    for (tmp = counter->countCoin; tmp > 1; i++) {
+        tmp = tmp >> 1;
+    }
+    return i >= COIN_LENGTH_END_GAME ? (counter->countCoin << GRID_WIDTH) + counter->countEmpty : counter->countCoin + counter->countEmpty;
+
     return (counter->countCoin << GRID_WIDTH) + counter->countEmpty;
 }
 

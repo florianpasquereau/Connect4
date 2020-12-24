@@ -26,6 +26,9 @@ static bool             initGridFromString(t_grid *grid, struct json_object *gri
     } else if (lastColumnPlayerCoin >= GRID_WIDTH && lastColumnPlayerCoin != 0xffffffff) {
         return false;
     }
+    for(x = 0; x < GRID_WIDTH; x++) {
+        grid->startColumns[x] = 0xffffffff;
+    }
     for (unsigned int y = 0; y < GRID_HEIGHT; y++) {
         gridRow = json_object_array_get_idx(gridArray, y);
         if (json_object_array_length(gridRow) != GRID_WIDTH) {
@@ -37,10 +40,15 @@ static bool             initGridFromString(t_grid *grid, struct json_object *gri
             if (cellSetValue((t_cell *)gridGetCell(grid, y, x), value) == false) {
                 return false;
             }
-            grid->cellFilled = value != EMPTY ? grid->cellFilled + 1 : grid->cellFilled;
+            if (value != EMPTY) {
+                grid->cellFilled++;
+            } else {
+                grid->startColumns[x] = y;
+            }
         }
     }
     grid->iaColor = iaColor;
+    grid->playerColor = iaColor == RED ? YELLOW : RED;
     grid->lastColumnPlayerCoin = lastColumnPlayerCoin;
     grid->lastRowPlayerCoin = initGridLastRowPlayerCoin(grid);
     grid->gameFinish = cellWinner(grid, *gridGetLastRowPayerCoin(grid), *gridGetLastColumnPayerCoin(grid));

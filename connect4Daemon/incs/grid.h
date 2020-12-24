@@ -25,10 +25,12 @@ typedef struct          s_grid
 {
     t_cell              grid[GRID_HEIGHT][GRID_WIDTH];  // grid
     e_value             iaColor;                        // cell value of the ia coin
+    e_value             playerColor;                    // cell value of the player coin
     unsigned int        lastColumnPlayerCoin;           // 0xffffffff if NULL else 0 <-> (GRID_WIDTH - 1)
     unsigned int        lastRowPlayerCoin;              // 0xffffffff if NULL else 0 <-> (GRID_HEIGHT- 1)
     unsigned int        cellFilled;                     // count cell not empty
     bool                gameFinish;                     // true if the game is finish else false
+    unsigned int        startColumns[GRID_WIDTH];       // store the first empty cell for each column
 }                       t_grid;
 
 bool                    initGrid(t_grid *grid, char const *requestGrid);
@@ -77,6 +79,7 @@ unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int
 /**
  * gridMinMax.c
 */
+
 bool                    findColumnIaSelected(t_grid *grid, unsigned char *columnIaSelected, char *message);
 
 #endif

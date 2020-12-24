@@ -1,7 +1,7 @@
 #include "../incs/grid.h"
 
 bool                    findColumnIaSelected(t_grid *grid, unsigned char *columnIaSelected, char *message)
-{
+{    
     if (grid == NULL) {
         strncpy(message, "Grid is null", BUFFER_SIZE_MESSAGE);
         return false;
@@ -12,7 +12,10 @@ bool                    findColumnIaSelected(t_grid *grid, unsigned char *column
     } else if ((*gridGetGameFinish(grid))) {
         strncpy(message, "Game is finish", BUFFER_SIZE_MESSAGE);
     } else {
-        (*columnIaSelected) = rand() % GRID_WIDTH;
+         e_value const    *value;
+        do {
+            (*columnIaSelected) = rand() % GRID_WIDTH;
+        } while ((value = cellgetValue(gridGetCell(grid, (*columnIaSelected), 0))) == NULL || value == EMPTY);
         strncpy(message, "Random column selected", BUFFER_SIZE_MESSAGE);
     }
     return true;

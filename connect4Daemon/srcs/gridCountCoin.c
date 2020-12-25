@@ -24,6 +24,7 @@ bool                    initCounterCoin(t_counterCoin *counterCoin,
     }
     counterCoin->countCoin = 1u;
     counterCoin->countEmpty = 1u;
+    counterCoin->countAlignedCoin = 1u;
     counterCoin->cellValueExpected = (*cellValue);
     counterCoin->f = f;
     return true;
@@ -35,14 +36,18 @@ t_counterCoin           *countCoin(t_counterCoin *counter)
     e_value const       *cellValue;
 
     if (counter == NULL || 
-            counter->loop >= COIN_SEARCH_LENGTH ||                                              //if atleast 4 coins are aligned 
+            counter->loop >= COIN_SEARCH_LENGTH ||                                              //stop the loop at the end max 4  
             (cell = gridGetCell(counter->grid, counter->y, counter->x)) == NULL) {              //if cell is outside of the grid range
         return counter;
     }
     if ((*(cellValue = cellgetValue(cell))) == counter->cellValueExpected) {
         counter->countCoin = counter->countCoin << 1;
+        if (counter->emptyFound == false) {
+            counter->countAlignedCoin ++;
+        }
     } else if ((*cellValue) == EMPTY) {
         counter->countEmpty = counter->countEmpty << 1;
+        counter->emptyFound = true;
     } else {
         return counter;
     }
@@ -50,13 +55,16 @@ t_counterCoin           *countCoin(t_counterCoin *counter)
     return counter->f(counter);
 }
 
-unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter)
+t_score                 buildScoreFromCointerCoin(t_counterCoin const *counter)
 {
     unsigned int        i;
     unsigned int        tmp;
+    t_score             ret;
 
+    ret.endGame = false;
+    ret.score = 0x80000000;
     if (counter == NULL) {
-        return 0x80000000;
+        return ret;
     }
     for(i = 1, tmp = counter->countEmpty; tmp > 1; i++) {
         tmp = tmp >> 1;
@@ -64,20 +72,16 @@ unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter)
     for (tmp = counter->countCoin; tmp > 1; i++) {
         tmp = tmp >> 1;
     }
-    return i >= COIN_LENGTH_END_GAME ? (counter->countCoin << GRID_WIDTH) + counter->countEmpty : counter->countCoin + counter->countEmpty;
-
-    return (counter->countCoin << GRID_WIDTH) + counter->countEmpty;
+    ret.score = i >= COIN_LENGTH_END_GAME ? (counter->countCoin << GRID_WIDTH) + counter->countEmpty + counter->countAlignedCoin : counter->countCoin + counter->countEmpty + counter->countAlignedCoin;
+    ret.endGame = counter->countAlignedCoin >= COIN_LENGTH_END_GAME ? true : false;
+    return ret;
 }
 
 // unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2)
 // {
-//     unsigned int        countCoin, countEmpty;
+//     t_counterCoin       counter;
 
-//     if (counter1 == NULL || counter2 == NULL) {
-//         return 0x80000000;
-//     }
-//     countCoin = counter1->countCoin | counter2->countCoin;
-//     countEmpty = counter1->countEmpty | counter2->countEmpty;
-
-//     return (countCoin & countEmpty) == 0xf ? (countCoin << GRID_WIDTH) + countEmpty : countEmpty;
+//     counter.countCoin = counter1->countCoin > counter2->countCoin ? counter1->countCoin : counter2->countCoin;
+//     counter.countEmpty = counter1->countEmpty > counter2->countEmpty ? counter1->countEmpty : counter2->countEmpty;
+//     return buildScoreFromCointerCoin(&counter);
 // }

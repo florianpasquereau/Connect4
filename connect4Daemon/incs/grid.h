@@ -48,33 +48,42 @@ typedef struct          s_counterCoin
 {
     unsigned int        countEmpty;
     unsigned int        countCoin;
+    unsigned int        countAlignedCoin;
     unsigned int        loop;
     e_value             cellValueExpected;
     t_grid const        *grid;
     unsigned int        y;
     unsigned int        x;
+    bool                emptyFound;
     struct s_counterCoin *
                         (*f)(struct s_counterCoin *);
 }                       t_counterCoin;
 
+typedef struct          s_score
+{
+    unsigned int        score;
+    bool                endGame;
+}                       t_score;
+
+
 bool                    initCounterCoin(t_counterCoin *counterCoin,t_grid const *grid, unsigned int const y, unsigned int const x, t_counterCoin *(*f)(t_counterCoin *));
 t_counterCoin           *countCoin(t_counterCoin *counter);
-unsigned int            buildScoreFromCointerCoin(t_counterCoin const *counter);
+t_score                 buildScoreFromCointerCoin(t_counterCoin const *counter);
 // unsigned int            addAndbuildScoreFromCointerCoin(t_counterCoin const *counter1, t_counterCoin const *counter2);
 
 /**
  * gridScoring.c
 */
-int                     scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
+// int                     scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
 
 /**
  * gridAnalyse.c
 */
 bool                    cellWinner(t_grid const *grid, unsigned int const y, unsigned int const x);
-unsigned int            countColumn(t_grid const *grid, unsigned int const y, unsigned int const x);
-unsigned int            countLine(t_grid const *grid, unsigned int const y, unsigned int const x);
-unsigned int            countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
-unsigned int            countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
+t_score                 countColumn(t_grid const *grid, unsigned int const y, unsigned int const x);
+t_score                 countLine(t_grid const *grid, unsigned int const y, unsigned int const x);
+t_score                 countLeftTopRightBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
+t_score                 countRightTopLeftBottom(t_grid const *grid, unsigned int const y, unsigned int const x);
 
 /**
  * gridMinMax.c

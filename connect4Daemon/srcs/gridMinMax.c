@@ -15,7 +15,8 @@ bool                    findColumnIaSelected(t_grid *grid, unsigned char *column
          e_value const    *value;
         do {
             (*columnIaSelected) = rand() % GRID_WIDTH;
-        } while ((value = cellgetValue(gridGetCell(grid, (*columnIaSelected), 0))) == NULL || value == EMPTY);
+            printf("%s %d : columnIaSelected : %u\n", __FILE__, __LINE__, (*columnIaSelected));
+        } while ((value = cellgetValue(gridGetCell(grid, 0, (*columnIaSelected)))) == NULL || (*value) != EMPTY);
         strncpy(message, "Random column selected", BUFFER_SIZE_MESSAGE);
     }
     return true;

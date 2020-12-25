@@ -80,19 +80,19 @@ static bool             compareJsonToData(t_testNode *testNode) {
         fprintf(stderr, "Test[%3u] : Grid.cellField == \033[31m%u\033[0m expected : \033[31m%u\033[0m\n", testNode->iTest, testNode->grid.cellFilled, testNode->cellFilledCounter);
         ret = false;
     }
-    if ((counter = countLine(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countLine) {
+    if ((counter = (countLine(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX).score)) != testNode->countLine) {
         fprintf(stderr, "Test[%3u] : countLine == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countLine);
         ret = false;
     }
-    if ((counter = countColumn(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countColumn) {
+    if ((counter = (countColumn(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX).score)) != testNode->countColumn) {
         fprintf(stderr, "Test[%3u] : countColumn == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countColumn);
         ret = false;
     }
-    if ((counter = countLeftTopRightBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countLeftTopRightBottom) {
+    if ((counter = (countLeftTopRightBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX).score)) != testNode->countLeftTopRightBottom) {
         fprintf(stderr, "Test[%3u] : countLeftTopRightBottom == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countLeftTopRightBottom);
         ret = false;
     }
-    if ((counter = countRightTopLeftBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX)) != testNode->countRightTopLeftBottom) {
+    if ((counter = (countRightTopLeftBottom(&testNode->grid, testNode->coinAnalyseY, testNode->coinAnalyseX).score)) != testNode->countRightTopLeftBottom) {
         fprintf(stderr, "Test[%3u] : countRightTopLeftBottom == \033[31m%d\033[0m expected : \033[31m%d\033[0m\n", testNode->iTest, counter, testNode->countRightTopLeftBottom);
         ret = false;
     }

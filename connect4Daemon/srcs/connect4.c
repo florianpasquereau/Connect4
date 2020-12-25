@@ -4,15 +4,15 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     time_t              start_t, end_t;
     double              timeSpend;
     t_answerGrid        answerGrid;
-    char                *answer, message[BUFFER_SIZE_MESSAGE] = "???????";
+    char                *answer, message[BUFFER_SIZE_MESSAGE + 1];
     unsigned char       columnIaSelected;
     bool                success;
 
     if (connect4 == NULL) {
         return false;
     }
+    memset(message, 0, BUFFER_SIZE_MESSAGE + 1);
     time(&start_t);
-    sleep(1);
     success = findColumnIaSelected(&connect4->grid, &columnIaSelected, message);
     time(&end_t);
     timeSpend = difftime(end_t, start_t);

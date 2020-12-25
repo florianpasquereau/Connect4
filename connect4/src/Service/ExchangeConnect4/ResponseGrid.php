@@ -10,16 +10,23 @@ class ResponseGrid
     private int $columnIaSelected;
     private float $timeSpend;
     private bool $gameFinish;
+    private bool $success;
+    private string $message;
 
     /**
      * @param string $objJson
      * @throws Connect4Exception
      */
     public function __construct(string $objJson) {
+        if (empty($objJson)) {
+            throw new Connect4Exception("ResponseGrid is empty");
+        }
         $mappingKeys = [
             "column_ia_selected" => "columnIaSelected",
             "time_spend" => "timeSpend",
             "game_finish" => "gameFinish",
+            "success" => "success",
+            "message" => "message"
         ];
         $answerGrid = json_decode($objJson);
 
@@ -30,7 +37,6 @@ class ResponseGrid
             $value = $answerGrid->$key;
             $this->$dest = $value;
         }
-        dump($this);
     }
 
     /**
@@ -55,6 +61,22 @@ class ResponseGrid
     public function isGameFinish(): bool
     {
         return $this->gameFinish;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return $this->success;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
     }
 
 }

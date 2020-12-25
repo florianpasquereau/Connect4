@@ -56,7 +56,9 @@ class Grid implements Stringable {
             for ($x = 0; $x < Grid::WIDTH; $x++) {
                 $ret .= $this->grid[$y][$x]->__toString();
             }
-            $ret .= "\n";
+            if ($y + 1 < Grid::HEIGHT) {
+                $ret .= "\n";
+            }
         }
         return $ret;
     }

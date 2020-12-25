@@ -26,8 +26,7 @@ class RequestGrid implements JsonSerializable {
         }
         $this->grid = $grid;
         $this->colorIa = $colorIa;
-        $this->lastColumnPlayerCoin = $lastColumnPlayerCoin == null ? -1 : $lastColumnPlayerCoin;
-        dump($this);
+        $this->lastColumnPlayerCoin = $lastColumnPlayerCoin === null ? 0xffffffff : $lastColumnPlayerCoin;
     }
 
     /**

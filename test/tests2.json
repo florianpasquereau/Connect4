@@ -1,0 +1,271 @@
+{
+    "tests" : [
+        {
+            "name":"CounterLine2",
+            "tests":[
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,1,1,1,1]
+                    ],
+                    "cellFilledCounter": 4,
+                    "coinAnalyse":{"y":5,"x":3},
+                    "countLine":1036,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,1,0,1,1]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":5,"x":3},
+                    "countLine":529,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,1,0,0,1]
+                    ],
+                    "cellFilledCounter": 2,
+                    "coinAnalyse":{"y":5,"x":3},
+                    "countLine":289,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,1,0,0,0]
+                    ],
+                    "cellFilledCounter": 1,
+                    "coinAnalyse":{"y":5,"x":3},
+                    "countLine":193,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,1]
+                    ],
+                    "cellFilledCounter": 1,
+                    "coinAnalyse":{"y":5,"x":6},
+                    "countLine":137,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":3
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,1,1]
+                    ],
+                    "cellFilledCounter": 2,
+                    "coinAnalyse":{"y":5,"x":5},
+                    "countLine":266,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":4
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,1,1]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":5,"x":2},
+                    "countLine":273,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":6,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [1,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 1,
+                    "coinAnalyse":{"y":5,"x":0},
+                    "countLine":137,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":3,
+                    "countRightTopLeftBottom":137
+                } 
+            ]
+        },
+        {
+            "name":"CounterColumn2",
+            "tests":[
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":3,"x":2},
+                    "countLine":161,
+                    "countColumn":523,
+                    "countLeftTopRightBottom":145,
+                    "countRightTopLeftBottom":161
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":4,"x":2},
+                    "countLine":161,
+                    "countColumn":519,
+                    "countLeftTopRightBottom":137,
+                    "countRightTopLeftBottom":145
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 3,
+                    "coinAnalyse":{"y":5,"x":2},
+                    "countLine":161,
+                    "countColumn":517,
+                    "countLeftTopRightBottom":6,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 4,
+                    "coinAnalyse":{"y":2,"x":2},
+                    "countLine":161,
+                    "countColumn":1032,
+                    "countLeftTopRightBottom":161,
+                    "countRightTopLeftBottom":145
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,2,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 4,
+                    "coinAnalyse":{"y":2,"x":2},
+                    "countLine":161,
+                    "countColumn":6,
+                    "countLeftTopRightBottom":161,
+                    "countRightTopLeftBottom":145
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,1,0,0,0,0],
+                        [0,0,2,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 4,
+                    "coinAnalyse":{"y":2,"x":2},
+                    "countLine":161,
+                    "countColumn":519,
+                    "countLeftTopRightBottom":161,
+                    "countRightTopLeftBottom":145
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [1,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 1,
+                    "coinAnalyse":{"y":5,"x":0},
+                    "countLine":137,
+                    "countColumn":137,
+                    "countLeftTopRightBottom":3,
+                    "countRightTopLeftBottom":137
+                },
+                {
+                    "grid" : [
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [0,0,0,0,0,0,0],
+                        [2,0,0,0,0,0,0],
+                        [1,0,0,0,0,0,0]
+                    ],
+                    "cellFilledCounter": 2,
+                    "coinAnalyse":{"y":5,"x":0},
+                    "countLine":137,
+                    "countColumn":3,
+                    "countLeftTopRightBottom":3,
+                    "countRightTopLeftBottom":137
+                }
+            ]
+        }
+    ]
+    
+}

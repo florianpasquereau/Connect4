@@ -20,7 +20,6 @@
 
 # include "grid.h"
 # include "ssl.h"
-# include "responseGrid.h"
 
 typedef struct          s_connect4 {
     int                 socket;

@@ -27,6 +27,7 @@ static bool                    sendIAGame(t_connect4 *connect4) {
         return false;
     }
     SSL_write(connect4->cSSL, answer, strlen(answer));
+    gridSetCell(&connect4->grid, columnIaSelected, RED);
     printGrid(&connect4->grid);
     return true;            
 }

@@ -78,6 +78,21 @@ t_cell const            *gridGetCell(t_grid const *grid, unsigned int const y, u
     return &grid->grid[y][x];
 }
 
+bool                    gridSetCell(t_grid *grid, unsigned int const x, e_value const cellValue)
+{
+    unsigned int        y;
+
+    if (grid == NULL) {
+        return false;
+    }
+    y = cellValue == EMPTY ? grid->startColumns[x] + 1 : grid->startColumns[x];
+    if (cellSetValue((t_cell *)gridGetCell(grid, y, x), cellValue) == false) {
+        return false;
+    }
+    grid->startColumns[x] = cellValue == EMPTY ? y : y - 1;
+    return true;
+}
+
 e_value const           *gridGetAiColor(t_grid const *grid)
 {
     if (grid == NULL) {

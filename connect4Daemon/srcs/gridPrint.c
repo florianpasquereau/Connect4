@@ -1,6 +1,8 @@
 #include "../incs/grid.h"
 
-static bool             printBuffer(char *buffer, ssize_t const bufferSize, ssize_t *bufferLength)
+// static bool             printBuffer(char *buffer, ssize_t const bufferSize, ssize_t *bufferLength)
+static bool             printBuffer(char *buffer, ssize_t *bufferLength)
+
 {
     ssize_t             lengthWriten;
     bool                ret;
@@ -8,7 +10,8 @@ static bool             printBuffer(char *buffer, ssize_t const bufferSize, ssiz
     lengthWriten = write(STDOUT_FILENO, buffer, *bufferLength);
     ret = lengthWriten == (*bufferLength);
     (*bufferLength) = 0;
-    memset(buffer, 0, bufferSize);
+    // memset(buffer, 0, bufferSize);
+    buffer[(*bufferLength)] = '\0';
     return ret;
 }      
 
@@ -21,7 +24,7 @@ static bool             addToBuffer(char *buffer, ssize_t const bufferSize, ssiz
 
     lenTxt = (ssize_t)strlen(txt);
     if ((*bufferLength) + lenTxt >= bufferSize - 1) {
-        printBuffer(buffer, bufferSize, bufferLength);
+        printBuffer(buffer, bufferLength);
     }
     strncat(buffer, txt, bufferSize - 1);
     (*bufferLength) += lenTxt;
@@ -31,16 +34,19 @@ static bool             addToBuffer(char *buffer, ssize_t const bufferSize, ssiz
 void                    printGrid(t_grid const *grid)
 {
     unsigned int        x;
-    char                buffer[BUFFER_SIZE];
+    char                buffer[BUFFER_SIZE] = "";
     ssize_t             currentLength = 0;
 
     if (grid != NULL) {
+        // memset(buffer, 0, BUFFER_SIZE);
         for(unsigned int y = 0; y < GRID_HEIGHT; y++) {
             for (x = 0; x < GRID_WIDTH; x++){
                 addToBuffer(buffer, BUFFER_SIZE, &currentLength, printCell(gridGetCell(grid, y, x)));
             }
             addToBuffer(buffer, BUFFER_SIZE, &currentLength, "\n");
         }
-        printBuffer(buffer, BUFFER_SIZE, &currentLength);
+        addToBuffer(buffer, BUFFER_SIZE, &currentLength, "\n");
+        printBuffer(buffer, &currentLength);
     }
+
 }

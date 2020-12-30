@@ -6,6 +6,7 @@
 # define COUNT_LEFT_SHIFT GRID_WIDTH
 # define COIN_LENGTH_END_GAME 4u
 # define COIN_SEARCH_LENGTH COIN_LENGTH_END_GAME - 1u
+# define GRID_DEEP 3
 
 # include <json-c/json.h>
 # include <stdlib.h>
@@ -76,7 +77,7 @@ t_score                 buildScoreFromCointerCoin(t_counterCoin const *counter);
 /**
  * gridScoring.c
 */
-// int                     scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
+unsigned int            scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
 
 /**
  * gridAnalyse.c
@@ -90,7 +91,6 @@ t_score                 countRightTopLeftBottom(t_grid const *grid, unsigned int
 /**
  * gridMinMax.c
 */
-
-bool                    findColumnIaSelected(t_grid *grid, unsigned char *columnIaSelected, char *message);
+bool                    findColumnIaSelected(t_grid *grid, unsigned int *columnIaSelected, char *message);
 
 #endif

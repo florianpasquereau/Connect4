@@ -5,7 +5,7 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     double              timeSpend;
     t_answerGrid        answerGrid;
     char                *answer, message[BUFFER_SIZE_MESSAGE + 1];
-    unsigned char       columnIaSelected;
+    unsigned int        columnIaSelected;
     bool                success;
 
     if (connect4 == NULL) {
@@ -28,6 +28,7 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     }
     SSL_write(connect4->cSSL, answer, strlen(answer));
     gridSetCell(&connect4->grid, columnIaSelected, RED);
+    printf("Time spend : %lu\n", end_t - start_t);
     printGrid(&connect4->grid);
     return true;            
 }

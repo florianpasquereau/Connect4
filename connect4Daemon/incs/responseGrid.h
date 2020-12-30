@@ -10,7 +10,7 @@
 
 typedef struct          s_answerGrid
 {
-    int                 columnIaSelected;
+    unsigned int        columnIaSelected;
     double              timeSpend;
     bool                gameFinish;
     char                buffer[BUFFER_SIZE];
@@ -19,7 +19,7 @@ typedef struct          s_answerGrid
 }                       t_answerGrid;
 
 void                    initAnswerGrid(t_answerGrid *answerGrid, 
-        unsigned const char columnIaSelected, 
+        unsigned const int columnIaSelected, 
         double const timeSpend, 
         bool const gameFinish, 
         bool const success, 

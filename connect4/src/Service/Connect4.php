@@ -14,7 +14,7 @@ final class Connect4 {
     private $streamContext;
     private int $errorCode = 0;
     private string $errorMessage = "";
-    private ?float $timeout = null;
+    private ?float $timeout = 120;
     private int $flag = STREAM_CLIENT_CONNECT;
 
     /**

@@ -14,12 +14,14 @@ static unsigned int     scoringCellBuilder(t_grid const *grid, unsigned int cons
     return ret.score;
 }
 
-unsigned int            scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x)
+long int                scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x, unsigned int const deep)
 {
     e_value const       *cellValue;
+    unsigned int        score;
 
     if ((cellValue = cellgetValue(gridGetCell(grid, y, x))) == NULL) {
         return 0;
     }
-    return scoringCellBuilder(grid, y, x);
+    score = scoringCellBuilder(grid, y, x) << deep;
+    return score;
 }

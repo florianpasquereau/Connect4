@@ -1,57 +1,101 @@
 #include "../incs/grid.h"
 
-static unsigned int     getMinScore(unsigned int const currentScore, unsigned int const cellScore, unsigned int const x, unsigned int *columnSelected) {
-    if (currentScore > cellScore) {
-        *columnSelected = x;
-        return cellScore;
-    }
-    return currentScore;
-}
+static bool             loopMin(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score);
+static bool             loopMax(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score);
 
-static unsigned int     getMaxScore(unsigned int const currentScore, unsigned int const cellScore, unsigned int const x, unsigned int *columnSelected) {
-    if (currentScore < cellScore) {
-        *columnSelected = x;
-        return cellScore;
-    }
-    return  currentScore;
-}
-
-static unsigned int    loopMinMax(t_grid *grid, 
-    e_value const cellValue, 
-    unsigned int const deep,
-    unsigned int lastX,
-    unsigned int *score,
-    unsigned int *columnSelected)
-{
+bool                    loopMin(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score) {
     unsigned int        x;
+    long int            scoreFunc = LONG_MAX;
+    long int            tmp = 0;
     e_value const       *currentCellValue;
-    unsigned int        (*f)(unsigned int const, unsigned int const, unsigned int const, unsigned int *);
 
-    if (deep == 0) {
-        return scoringCell(grid, grid->startColumns[lastX] + 1, lastX);
+    if (cellWinner(grid, grid->startColumns[lastX] + 1, lastX) == true || deep == 0) { //end loopMax
+        (*score) = scoringCell(grid, grid->startColumns[lastX] + 1, lastX, deep);
+        return true;
     }
-    f = cellValue == grid->iaColor ? getMaxScore : getMinScore;
-    for (x = 0; x < GRID_WIDTH; x++) {
-        if ((currentCellValue =  cellgetValue(gridGetCell(grid, 0, x))) == NULL || (*currentCellValue) != EMPTY) {
+    for(x = 0; x < GRID_WIDTH; x++) {
+        if ((currentCellValue = cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
+            return false;
+        } else if ((*currentCellValue) != EMPTY) {
             continue;
         }
-        if (gridSetCell(grid, x, cellValue) == false) {
-            return *score;
+        if (gridSetCell(grid, x, grid->playerColor) == false || loopMax(grid, deep -1, x, &tmp) == false) {
+            return false;
+        } else if (tmp < scoreFunc) {
+            scoreFunc = tmp;
+            // printGridChecker(grid, grid->startColumns[x] + 1, x);
+            // printf("\033[0;33mYellow\033[0m column[%u] score : %ld WorstScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
         }
-        (*score) = f((*score), loopMinMax(grid, cellValue == RED ? YELLOW : RED, deep - 1, x, score, columnSelected), x, columnSelected);
-        cellWinner(grid, grid->startColumns[x] + 1, x);
-        printf("grid[%u][%u] %s => : %u\n", grid->startColumns[x] + 1, x, cellValue == grid->iaColor ? "MAX" : "MIN", *score);
-        printGrid(grid);
-        if (gridSetCell(grid, x, EMPTY) == false) {
-            return *score;
+        if (gridSetCell(grid, x, EMPTY) == false) { //remove the coin tested
+            return false;
         }
     }
-    return *score;
+    *score = scoreFunc;
+    return true;  
+}
+
+bool                    loopMax(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score) {
+    unsigned int        x;
+    long int            scoreFunc = LONG_MIN;
+    long int            tmp = 0;
+    e_value const       *currentCellValue;
+
+    if (cellWinner(grid, grid->startColumns[lastX] + 1, lastX) == true || deep == 0) { //end loopMin
+        (*score) = scoringCell(grid, grid->startColumns[lastX] + 1, lastX, deep) * -1;
+        return true;
+    }
+    for(x = 0; x < GRID_WIDTH; x++) {
+        if ((currentCellValue = cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
+            return false;
+        } else if ((*currentCellValue) != EMPTY) {
+            continue;
+        }
+        if (gridSetCell(grid, x, grid->iaColor) == false || loopMin(grid, deep - 1, x, &tmp) == false) {
+            return false;
+        } else if (tmp > scoreFunc) {
+            scoreFunc = tmp;
+            // printf("\033[0;31mRED\033[0m column[%u] score : %ld bestScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
+            // printGridChecker(grid, grid->startColumns[x] + 1, x);
+        }
+        if (gridSetCell(grid, x, EMPTY) == false) { //remove the coin tested
+            return false;
+        }
+    }
+    *score = scoreFunc;
+    return true;  
+}
+
+static bool             startMinMax(t_grid *grid, unsigned int *columnIaSelected) {
+    unsigned int        x;
+    long int            scoreFunc = LONG_MIN;
+    long int            tmp;
+    e_value const       *currentCellValue;
+
+    (*columnIaSelected) = 0xffffffff;
+    for(x = 0; x < GRID_WIDTH; x++) {
+        if ((currentCellValue =  cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
+            return false;
+        } else if ((*currentCellValue) != EMPTY) {
+            continue;
+        }
+        if (gridSetCell(grid, x, grid->iaColor) == false || loopMin(grid, GRID_DEEP - 1, x, &tmp) == false) {
+            return false;
+        } else if (tmp > scoreFunc) {
+            scoreFunc = tmp;
+            (*columnIaSelected) = x;
+        }
+        printf("END column[%u] score : %ld bestScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
+        printGridChecker(grid, grid->startColumns[x] + 1, x);
+        if (gridSetCell(grid, x, EMPTY) == false) {
+            return false;
+        }
+    }
+    printf("columnSelected = %u with a score of %ld\n------------------------------\n", *columnIaSelected, scoreFunc);
+    return true;
 }
 
 bool                    findColumnIaSelected(t_grid *grid, unsigned int *columnIaSelected, char *message)
 {   
-    unsigned int        score;
     if (grid == NULL) {
         strncpy(message, "Grid is null", BUFFER_SIZE_MESSAGE);
         return false;
@@ -62,15 +106,11 @@ bool                    findColumnIaSelected(t_grid *grid, unsigned int *columnI
     } else if ((*gridGetGameFinish(grid))) {
         strncpy(message, "Game is finish", BUFFER_SIZE_MESSAGE);
     } else {
-        score = GRID_DEEP % 2 == 1 ? 0 : 0xffffffff;
-        loopMinMax(grid, RED, GRID_DEEP, 0, &score, columnIaSelected);
-        printf("columnSelected = %u\n------------------------------\n", *columnIaSelected);
-        // e_value const    *value;
-        // do {
-        //     (*columnIaSelected) = rand() % GRID_WIDTH;
-        //     printf("%s %d : columnIaSelected : %u\n", __FILE__, __LINE__, (*columnIaSelected));
-        // } while ((value = cellgetValue(gridGetCell(grid, 0, (*columnIaSelected)))) == NULL || (*value) != EMPTY);
-        strncpy(message, "Random column selected", BUFFER_SIZE_MESSAGE);
+        if (startMinMax(grid, columnIaSelected) == false) {
+            strncpy(message, "Not possible to find the selected column", BUFFER_SIZE_MESSAGE);
+            return false;
+        }
+        strncpy(message, "IA column selected", BUFFER_SIZE_MESSAGE);
     }
     return true;
 }

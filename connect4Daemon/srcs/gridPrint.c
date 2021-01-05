@@ -38,10 +38,32 @@ void                    printGrid(t_grid const *grid)
     ssize_t             currentLength = 0;
 
     if (grid != NULL) {
-        // memset(buffer, 0, BUFFER_SIZE);
         for(unsigned int y = 0; y < GRID_HEIGHT; y++) {
             for (x = 0; x < GRID_WIDTH; x++){
                 addToBuffer(buffer, BUFFER_SIZE, &currentLength, printCell(gridGetCell(grid, y, x)));
+            }
+            addToBuffer(buffer, BUFFER_SIZE, &currentLength, "\n");
+        }
+        addToBuffer(buffer, BUFFER_SIZE, &currentLength, "\n");
+        printBuffer(buffer, &currentLength);
+    }
+
+}
+
+void                    printGridChecker(t_grid const *grid, unsigned int const line, unsigned int const column)
+{
+    unsigned int        x;
+    char                buffer[BUFFER_SIZE] = "";
+    ssize_t             currentLength = 0;
+
+    if (grid != NULL) {
+        for(unsigned int y = 0; y < GRID_HEIGHT; y++) {
+            for (x = 0; x < GRID_WIDTH; x++){
+                if (y == line && x == column) {
+                    addToBuffer(buffer, BUFFER_SIZE, &currentLength, printCellSelected(gridGetCell(grid, y, x)));
+                } else {
+                    addToBuffer(buffer, BUFFER_SIZE, &currentLength, printCell(gridGetCell(grid, y, x)));
+                }
             }
             addToBuffer(buffer, BUFFER_SIZE, &currentLength, "\n");
         }

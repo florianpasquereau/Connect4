@@ -1,8 +1,8 @@
 #ifndef CONNECT4_H
 # define CONNECT4_H
 
-# define MIN_PORT 1u
-# define MAX_PORT 0xffffu
+# define MIN_PORT 0x1
+# define MAX_PORT 0xffff
 
 # define BUFFER_ERROR_SIZE 150
 # define BACKLOG 1

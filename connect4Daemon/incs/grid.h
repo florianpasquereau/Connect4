@@ -6,7 +6,7 @@
 # define COUNT_LEFT_SHIFT GRID_WIDTH
 # define COIN_LENGTH_END_GAME 4u
 # define COIN_SEARCH_LENGTH COIN_LENGTH_END_GAME - 1u
-# define GRID_DEEP 3
+# define GRID_DEEP 9
 
 # include <json-c/json.h>
 # include <stdlib.h>
@@ -15,6 +15,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 
 # include "cell.h"
 # include "responseGrid.h"
@@ -36,13 +37,19 @@ typedef struct          s_grid
 }                       t_grid;
 
 bool                    initGrid(t_grid *grid, char const *requestGrid);
-void                    printGrid(t_grid const *grid);
 t_cell const            *gridGetCell(t_grid const *grid, unsigned int const y, unsigned int const x);
 bool                    gridSetCell(t_grid *grid, unsigned int const x, e_value const cellValue);
 e_value const           *gridGetAiColor(t_grid const *grid);
 unsigned int const      *gridGetLastColumnPayerCoin(t_grid const *grid);
 unsigned int const      *gridGetLastRowPayerCoin(t_grid const *grid);
 bool const              *gridGetGameFinish(t_grid const *grid) ;
+
+
+/**
+ * gridPrinter.c
+*/
+void                    printGrid(t_grid const *grid);
+void                    printGridChecker(t_grid const *grid, unsigned int const line, unsigned int const column);
 
 /**
  * gridCountCoin.c
@@ -77,7 +84,7 @@ t_score                 buildScoreFromCointerCoin(t_counterCoin const *counter);
 /**
  * gridScoring.c
 */
-unsigned int            scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x);
+long int                scoringCell(t_grid const *grid, unsigned int const y, unsigned int const x, unsigned int const deep);
 
 /**
  * gridAnalyse.c

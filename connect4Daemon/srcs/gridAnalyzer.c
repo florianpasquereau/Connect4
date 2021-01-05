@@ -65,11 +65,12 @@ bool                    cellWinner(t_grid const *grid, unsigned int const y, uns
     t_score             rightTopLeftBottom = countRightTopLeftBottom(grid, y, x);
     t_score             leftTopRightBottom = countLeftTopRightBottom(grid, y, x);
 
-    printf("grid[%u][%u]\n", y, x);
-    printf("countColumn : %d\n", column.score);
-    printf("countLine : %d\n", line.score);
-    printf("countRightTopLeftBottom : %d\n", rightTopLeftBottom.score);
-    printf("countLeftTopRightBottom : %d\n", leftTopRightBottom.score);
+    // printf("grid[%u][%u]\n", y, x);
+    // printf("countColumn : %d\n", column.score);
+    // printf("countLine : %d\n", line.score);
+    // printf("countRightTopLeftBottom : %d\n", rightTopLeftBottom.score);
+    // printf("countLeftTopRightBottom : %d\n", leftTopRightBottom.score);
+    // printGridChecker(grid, y, x);
     return (line.endGame || column.endGame || rightTopLeftBottom.endGame || leftTopRightBottom.endGame);
 }
 

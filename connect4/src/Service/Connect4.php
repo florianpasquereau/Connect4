@@ -14,7 +14,7 @@ final class Connect4 {
     private $streamContext;
     private int $errorCode = 0;
     private string $errorMessage = "";
-    private ?float $timeout = 120;
+    private ?float $timeout = 3600;
     private int $flag = STREAM_CLIENT_CONNECT;
 
     /**
@@ -53,6 +53,7 @@ final class Connect4 {
             throw new Connect4Exception(sprintf("'%s' is not accessible code : %s -> %s", $this->address, $this->errorCode, $this->errorMessage));
         }
         fwrite($fd, json_encode($requestGrid));
+        stream_set_timeout($fd, $this->timeout);
         $responseGrid = fread($fd, 2000);
         fclose($fd);
         return new ResponseGrid($responseGrid);

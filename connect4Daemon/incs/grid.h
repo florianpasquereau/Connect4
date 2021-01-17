@@ -6,7 +6,7 @@
 # define COUNT_LEFT_SHIFT GRID_WIDTH
 # define COIN_LENGTH_END_GAME 4u
 # define COIN_SEARCH_LENGTH COIN_LENGTH_END_GAME - 1u
-# define GRID_DEEP 9
+# define GRID_DEEP 9u
 
 # include <json-c/json.h>
 # include <stdlib.h>

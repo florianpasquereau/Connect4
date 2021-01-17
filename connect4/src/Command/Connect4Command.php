@@ -39,7 +39,10 @@ class Connect4Command extends Command
         $connect4Selenium = new Connect4Selenium();
         $connect4Selenium->startParty('https://www.helpfulgames.com/subjects/brain-training/connect-four.html');
         do {
-            $requestGrid = $connect4Selenium->buildRequestGrid($gridPrev);
+            if (($requestGrid = $connect4Selenium->buildRequestGrid($gridPrev)) === null) {
+                $output->writeln("IA won. Game finish.");
+                break ;
+            }
             $output->writeln($requestGrid->getGrid()->__toString());
             $responseGrid = $connect4->send($requestGrid);
             if (!$responseGrid->isSuccess())  {

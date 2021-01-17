@@ -82,7 +82,7 @@ bool                    gridSetCell(t_grid *grid, unsigned int const x, e_value 
 {
     unsigned int        y;
 
-    if (grid == NULL) {
+    if (grid == NULL || x >= GRID_WIDTH) {
         return false;
     }
     y = cellValue == EMPTY ? grid->startColumns[x] + 1 : grid->startColumns[x];

@@ -42,8 +42,18 @@ class Connect4Selenium {
      * @return RequestGrid
      * @throws Connect4Exception
      */
-    public function buildRequestGrid(?Grid $gridPrev) : RequestGrid {
+    public function buildRequestGrid(?Grid $gridPrev) : ?RequestGrid {
         $grid = new Grid();
+        //player_won
+        try {
+            $iaWon = $this->driver
+                ->findElement(WebDriverBy::cssSelector('#player_won'));
+        } catch (NoSuchElementException $e) {
+            $iaWon = null;
+        }
+        if ($iaWon !== null) {
+            return null;
+        }
         $holes = $this->driver
             ->findElement(WebDriverBy::cssSelector('#gameBoard'))
             ->findElements(WebDriverBy::className('hole'));

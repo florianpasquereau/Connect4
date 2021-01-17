@@ -2,9 +2,19 @@
 
 static bool             loopMin(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score);
 static bool             loopMax(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score);
+static const unsigned int       
+                        orderCheckCoin[GRID_WIDTH][GRID_WIDTH] = {
+    {0u, 1u, 2u, 3u, 4u, 5u, 6u},
+    {1u, 0u, 2u, 3u, 4u, 5u, 6u},
+    {2u, 1u, 3u, 0u, 4u, 5u, 6u},
+    {3u, 2u, 4u, 1u, 5u, 0u, 6u},
+    {4u, 3u, 5u, 2u, 6u, 1u, 0u},
+    {5u, 4u, 6u, 3u, 2u, 1u, 0u},
+    {6u, 5u, 4u, 3u, 2u, 1u, 0u}
+};
 
 bool                    loopMin(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score) {
-    unsigned int        x;
+    unsigned int        i, x;
     long int            scoreFunc = LONG_MAX;
     long int            tmp = 0;
     e_value const       *currentCellValue;
@@ -12,8 +22,11 @@ bool                    loopMin(t_grid *grid, unsigned int const deep, unsigned 
     if (cellWinner(grid, grid->startColumns[lastX] + 1, lastX) == true || deep == 0) { //end loopMax
         (*score) = scoringCell(grid, grid->startColumns[lastX] + 1, lastX, deep);
         return true;
+    } else if (lastX >= GRID_WIDTH) {
+        return false;
     }
-    for(x = 0; x < GRID_WIDTH; x++) {
+    for(i = 0; i < GRID_WIDTH; i++) {
+        x = orderCheckCoin[lastX][i];
         if ((currentCellValue = cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
             return false;
         } else if ((*currentCellValue) != EMPTY) {
@@ -23,8 +36,6 @@ bool                    loopMin(t_grid *grid, unsigned int const deep, unsigned 
             return false;
         } else if (tmp < scoreFunc) {
             scoreFunc = tmp;
-            // printGridChecker(grid, grid->startColumns[x] + 1, x);
-            // printf("\033[0;33mYellow\033[0m column[%u] score : %ld WorstScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
         }
         if (gridSetCell(grid, x, EMPTY) == false) { //remove the coin tested
             return false;
@@ -35,7 +46,7 @@ bool                    loopMin(t_grid *grid, unsigned int const deep, unsigned 
 }
 
 bool                    loopMax(t_grid *grid, unsigned int const deep, unsigned int lastX, long int *score) {
-    unsigned int        x;
+    unsigned int        i, x;
     long int            scoreFunc = LONG_MIN;
     long int            tmp = 0;
     e_value const       *currentCellValue;
@@ -43,8 +54,11 @@ bool                    loopMax(t_grid *grid, unsigned int const deep, unsigned 
     if (cellWinner(grid, grid->startColumns[lastX] + 1, lastX) == true || deep == 0) { //end loopMin
         (*score) = scoringCell(grid, grid->startColumns[lastX] + 1, lastX, deep) * -1;
         return true;
+    } else if (lastX >= GRID_WIDTH) {
+        return false;
     }
-    for(x = 0; x < GRID_WIDTH; x++) {
+    for(i = 0; i < GRID_WIDTH; i++) {
+        x = orderCheckCoin[lastX][i];
         if ((currentCellValue = cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
             return false;
         } else if ((*currentCellValue) != EMPTY) {
@@ -54,8 +68,6 @@ bool                    loopMax(t_grid *grid, unsigned int const deep, unsigned 
             return false;
         } else if (tmp > scoreFunc) {
             scoreFunc = tmp;
-            // printf("\033[0;31mRED\033[0m column[%u] score : %ld bestScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
-            // printGridChecker(grid, grid->startColumns[x] + 1, x);
         }
         if (gridSetCell(grid, x, EMPTY) == false) { //remove the coin tested
             return false;
@@ -66,26 +78,31 @@ bool                    loopMax(t_grid *grid, unsigned int const deep, unsigned 
 }
 
 static bool             startMinMax(t_grid *grid, unsigned int *columnIaSelected) {
-    unsigned int        x;
+    unsigned int        i, x;
     long int            scoreFunc = LONG_MIN;
     long int            tmp;
     e_value const       *currentCellValue;
 
     (*columnIaSelected) = 0xffffffff;
-    for(x = 0; x < GRID_WIDTH; x++) {
+    if (grid->lastRowPlayerCoin >= GRID_WIDTH) {
+        return false;
+    }
+    for(i = 0; i < GRID_WIDTH; i++) {
+        x = orderCheckCoin[grid->lastRowPlayerCoin][i];
+        //check if the column is full
         if ((currentCellValue =  cellgetValue(gridGetCell(grid, 0, x))) == NULL) {
             return false;
         } else if ((*currentCellValue) != EMPTY) {
             continue;
         }
-        if (gridSetCell(grid, x, grid->iaColor) == false || loopMin(grid, GRID_DEEP - 1, x, &tmp) == false) {
+        //stating the min loop
+        if (gridSetCell(grid, x, grid->iaColor) == false || loopMin(grid, GRID_DEEP - 1, x, &tmp) == false) {//
             return false;
         } else if (tmp > scoreFunc) {
             scoreFunc = tmp;
             (*columnIaSelected) = x;
         }
-        printf("END column[%u] score : %ld bestScore = %ld on column : %u\n", x, tmp, scoreFunc, x);
-        printGridChecker(grid, grid->startColumns[x] + 1, x);
+        //remove the coin putted
         if (gridSetCell(grid, x, EMPTY) == false) {
             return false;
         }

@@ -1,7 +1,7 @@
 #include "../incs/responseGrid.h"
 
 void                    initAnswerGrid(t_answerGrid *answerGrid, 
-        unsigned const char columnIaSelected, 
+        unsigned const int columnIaSelected, 
         double const timeSpend, 
         bool const gameFinish, 
         bool const success, 

@@ -4,15 +4,15 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     time_t              start_t, end_t;
     double              timeSpend;
     t_answerGrid        answerGrid;
-    char                *answer, message[BUFFER_SIZE_MESSAGE] = "???????";
-    unsigned char       columnIaSelected;
+    char                *answer, message[BUFFER_SIZE_MESSAGE + 1];
+    unsigned int        columnIaSelected;
     bool                success;
 
     if (connect4 == NULL) {
         return false;
     }
+    memset(message, 0, BUFFER_SIZE_MESSAGE + 1);
     time(&start_t);
-    sleep(1);
     success = findColumnIaSelected(&connect4->grid, &columnIaSelected, message);
     time(&end_t);
     timeSpend = difftime(end_t, start_t);
@@ -27,6 +27,8 @@ static bool                    sendIAGame(t_connect4 *connect4) {
         return false;
     }
     SSL_write(connect4->cSSL, answer, strlen(answer));
+    gridSetCell(&connect4->grid, columnIaSelected, RED);
+    printf("Time spend : %lu\n", end_t - start_t);
     printGrid(&connect4->grid);
     return true;            
 }

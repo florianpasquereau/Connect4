@@ -1,3 +1,4 @@
 connect4Daemon/objs/
 connect4Daemon/connect4_d
 Certificate/
+.vscode/

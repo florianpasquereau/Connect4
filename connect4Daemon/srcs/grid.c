@@ -71,25 +71,26 @@ bool                    initGrid(t_grid *grid, char const *requestGrid) {
     return initGridFromString(grid, gridArray, json_object_get_int(colorIa), (unsigned int)json_object_get_int64(lastColumnPlayerCoin));
 }
 
-void                    printGrid(t_grid const *grid)
-{
-    unsigned int        x;
-
-    if (grid != NULL) {
-        for(unsigned int y = 0; y < GRID_HEIGHT; y++) {
-            for (x = 0; x < GRID_WIDTH; x++){
-                printf("%s", printCell(gridGetCell(grid, y, x)));
-            }
-            printf("\n");
-        }
-    }
-}
-
 t_cell const            *gridGetCell(t_grid const *grid, unsigned int const y, unsigned int const x) {
     if (grid == NULL || y >= GRID_HEIGHT || x >= GRID_WIDTH) {
         return NULL;
     }
     return &grid->grid[y][x];
+}
+
+bool                    gridSetCell(t_grid *grid, unsigned int const x, e_value const cellValue)
+{
+    unsigned int        y;
+
+    if (grid == NULL || x >= GRID_WIDTH) {
+        return false;
+    }
+    y = cellValue == EMPTY ? grid->startColumns[x] + 1 : grid->startColumns[x];
+    if (cellSetValue((t_cell *)gridGetCell(grid, y, x), cellValue) == false) {
+        return false;
+    }
+    grid->startColumns[x] = cellValue == EMPTY ? y : y - 1;
+    return true;
 }
 
 e_value const           *gridGetAiColor(t_grid const *grid)

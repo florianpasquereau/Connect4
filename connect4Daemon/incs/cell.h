@@ -17,6 +17,7 @@ typedef struct          s_cell
 }                       t_cell;
 
 char                    *printCell(t_cell const *cell);
+char                    *printCellSelected(t_cell const *cell);
 bool                    cellSetValue(t_cell *cell, e_value value);
 e_value const           *cellgetValue(t_cell const *cell);
 

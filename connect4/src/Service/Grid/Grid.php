@@ -63,6 +63,21 @@ class Grid implements Stringable {
         return $ret;
     }
 
+    public function __toDatabase(): string
+    {
+        $ret = "";
+
+        for ($y = 0; $y < Grid::HEIGHT; $y++) {
+            for ($x = 0; $x < Grid::WIDTH; $x++) {
+                $ret .= $this->grid[$y][$x]->__toDatabase();
+            }
+            if ($y + 1 < Grid::HEIGHT) {
+                $ret .= "\n";
+            }
+        }
+        return $ret;
+    }
+
     /**
      * @return int[][]
      * @inheritDoc

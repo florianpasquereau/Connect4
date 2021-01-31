@@ -7,13 +7,14 @@ static bool                    sendIAGame(t_connect4 *connect4) {
     char                *answer, message[BUFFER_SIZE_MESSAGE + 1];
     unsigned int        columnIaSelected;
     bool                success;
+    long int            score;
 
     if (connect4 == NULL) {
         return false;
     }
     memset(message, 0, BUFFER_SIZE_MESSAGE + 1);
     time(&start_t);
-    success = findColumnIaSelected(&connect4->grid, &columnIaSelected, message);
+    success = findColumnIaSelected(&connect4->grid, &columnIaSelected, message, &score);
     time(&end_t);
     timeSpend = difftime(end_t, start_t);
     initAnswerGrid(&answerGrid, 
@@ -21,7 +22,8 @@ static bool                    sendIAGame(t_connect4 *connect4) {
         timeSpend, 
         (*gridGetGameFinish(&connect4->grid)),
         success,
-        message
+        message,
+        score
     );
     if ((answer = answerGridToJson(&answerGrid)) == NULL) {
         return false;

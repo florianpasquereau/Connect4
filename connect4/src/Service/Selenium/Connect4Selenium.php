@@ -31,9 +31,15 @@ class Connect4Selenium {
     }
 
     public function newGame() {
+//        $elements = $this->driver
         $this->driver
             ->findElement(WebDriverBy::cssSelector('#chooseLevel'))
             ->click();
+//            ->findElements(WebDriverBy::className('levelNameContainer'));
+//        foreach($elements as $element) {
+//            dump($element);
+//        }
+//        die();
         sleep(5);
     }
 

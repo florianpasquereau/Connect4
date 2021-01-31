@@ -5,7 +5,10 @@ namespace App\Command;
 use App\Exception\Connect4Exception;
 use App\Exception\Connect4SeleniumException;
 use App\Service\Connect4;
+use App\Service\ExchangeConnect4\ResponseGrid;
+use App\Service\Grid\Grid;
 use App\Service\Selenium\Connect4Selenium;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +17,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Connect4Command extends Command
 {
     protected static $defaultName = 'app:connect4';
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        parent::__construct(null);
+        $this->entityManager = $entityManager;
+    }
 
     protected function configure()
     {
@@ -50,9 +60,23 @@ class Connect4Command extends Command
             } else {
                 $connect4Selenium->putCoin($responseGrid);
                 $gridPrev = $requestGrid->getGrid();
-                $output->writeln(sprintf("IA play column : %d -> %s\n", $responseGrid->getColumnIaSelected(), $responseGrid->getMessage()));
+                $output->writeln(sprintf("IA play column : %d -> %s with the score : %d\n",
+                    $responseGrid->getColumnIaSelected(),
+                    $responseGrid->getMessage(),
+                    $responseGrid->getScore()
+                ));
+                $this->storeToDatabase($gridPrev, $responseGrid);
             }
         } while(!$responseGrid->isGameFinish());
         return Command::SUCCESS;
+    }
+
+    private function storeToDatabase(Grid $gridPrev, ResponseGrid $responseGrid) {
+        $gridStore = new \App\Entity\Grid();
+        $gridStore->setName($gridPrev->__toDatabase())
+            ->setColumnIaSelected($responseGrid->getColumnIaSelected())
+            ->setScore($responseGrid->getScore());
+        $this->entityManager->persist($gridStore);
+        $this->entityManager->flush();
     }
 }

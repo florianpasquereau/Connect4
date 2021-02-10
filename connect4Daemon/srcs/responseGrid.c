@@ -5,17 +5,19 @@ void                    initAnswerGrid(t_answerGrid *answerGrid,
         double const timeSpend, 
         bool const gameFinish, 
         bool const success, 
-        char const *message)
+        char const *message, 
+        long int score)
 {
     if (answerGrid == NULL) {
         return ;
     }
     memset(answerGrid, 0, sizeof(t_answerGrid));
     answerGrid->success = success;
-    strncpy(answerGrid->message, message, BUFFER_SIZE_MESSAGE); 
+    strncpy(answerGrid->message, message, BUFFER_SIZE_MESSAGE);
     answerGrid->columnIaSelected = columnIaSelected;
     answerGrid->timeSpend = timeSpend;
     answerGrid->gameFinish = gameFinish;
+    answerGrid->score = score;
 }
 
 char                    *answerGridToJson(t_answerGrid *answerGrid)
@@ -28,13 +30,15 @@ char                    *answerGridToJson(t_answerGrid *answerGrid)
             \"time_spend\":%f,\
             \"game_finish\":%s,\
             \"success\":%s,\
-            \"message\":\"%s\"\
+            \"message\":\"%s\",\
+            \"score\":\"%li\"\
         }",
         answerGrid->columnIaSelected,
         answerGrid->timeSpend,
         answerGrid->gameFinish == true ? "true" : "false",
         answerGrid->success == true ? "true" : "false",
-        answerGrid->message
+        answerGrid->message,
+        answerGrid->score
     );
     return answerGrid->buffer;
 }

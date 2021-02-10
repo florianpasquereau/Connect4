@@ -31,9 +31,15 @@ class Connect4Selenium {
     }
 
     public function newGame() {
+//        $elements = $this->driver
         $this->driver
             ->findElement(WebDriverBy::cssSelector('#chooseLevel'))
             ->click();
+//            ->findElements(WebDriverBy::className('levelNameContainer'));
+//        foreach($elements as $element) {
+//            dump($element);
+//        }
+//        die();
         sleep(5);
     }
 
@@ -84,7 +90,7 @@ class Connect4Selenium {
         $this->driver
             ->findElement(WebDriverBy::cssSelector(sprintf('#col%d', $column)))
             ->click();
-        sleep(5);
+        sleep(4);
     }
 
     private function getValueCell(?RemoteWebElement $hole) : int {

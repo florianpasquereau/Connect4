@@ -12,6 +12,7 @@ class ResponseGrid
     private bool $gameFinish;
     private bool $success;
     private string $message;
+    private int $score;
 
     /**
      * @param string $objJson
@@ -25,6 +26,7 @@ class ResponseGrid
             "column_ia_selected" => "columnIaSelected",
             "time_spend" => "timeSpend",
             "game_finish" => "gameFinish",
+            "score" => "score",
             "success" => "success",
             "message" => "message"
         ];
@@ -79,4 +81,11 @@ class ResponseGrid
         return $this->message;
     }
 
+    /**
+     * @return int
+     */
+    public function getScore(): int
+    {
+        return $this->score;
+    }
 }

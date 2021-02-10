@@ -15,7 +15,8 @@ typedef struct          s_answerGrid
     bool                gameFinish;
     char                buffer[BUFFER_SIZE];
     bool                success;
-    char                message[BUFFER_SIZE_MESSAGE];
+    char                message[BUFFER_SIZE_MESSAGE + 1];
+    long int            score;
 }                       t_answerGrid;
 
 void                    initAnswerGrid(t_answerGrid *answerGrid, 
@@ -23,7 +24,8 @@ void                    initAnswerGrid(t_answerGrid *answerGrid,
         double const timeSpend, 
         bool const gameFinish, 
         bool const success, 
-        char const *message);
+        char const *message, 
+        long int score);
 char                    *answerGridToJson(t_answerGrid *answerGrid);
 
 #endif

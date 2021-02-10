@@ -35,4 +35,12 @@ class Cell implements Stringable {
     {
         return [$this->getValue()];
     }
+
+    public function __toDatabase()
+    {
+        if ($this->value === CellValue::EMPTY) {
+            return '0';
+        }
+        return $this->value === CellValue::RED ? '1' : '2';
+    }
 }

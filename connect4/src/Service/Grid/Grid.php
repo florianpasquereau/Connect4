@@ -4,6 +4,7 @@ namespace App\Service\Grid;
 
 use App\Exception\Connect4Exception;
 use App\Service\Grid\Cell\Cell;
+use App\Service\Grid\Cell\CellValue;
 use App\Service\Stringable;
 
 class Grid implements Stringable {
@@ -14,6 +15,8 @@ class Grid implements Stringable {
      * @var Cell[][];
     */
     private array $grid = [];
+
+    private int $countCellFilled = 0;
 
     /**
      * @param int $y
@@ -28,6 +31,9 @@ class Grid implements Stringable {
             throw new Connect4Exception(sprintf("Not possible to access to the column '%s'", $x));
         }
         $this->grid[$y][$x] = new Cell($value);
+        if ($value === CellValue::RED || $value === CellValue::YELLOW) {
+            $this->countCellFilled ++;
+        }
     }
 
     /**
@@ -46,6 +52,16 @@ class Grid implements Stringable {
     }
 
     /**
+     * @return int
+     */
+    public function getCountCellFilled(): int
+    {
+        return $this->countCellFilled;
+    }
+
+
+
+    /**
      * @inheritDoc
     */
     public function __toString(): string
@@ -55,6 +71,21 @@ class Grid implements Stringable {
         for ($y = 0; $y < Grid::HEIGHT; $y++) {
             for ($x = 0; $x < Grid::WIDTH; $x++) {
                 $ret .= $this->grid[$y][$x]->__toString();
+            }
+            if ($y + 1 < Grid::HEIGHT) {
+                $ret .= "\n";
+            }
+        }
+        return $ret;
+    }
+
+    public function __toDatabase(): string
+    {
+        $ret = "";
+
+        for ($y = 0; $y < Grid::HEIGHT; $y++) {
+            for ($x = 0; $x < Grid::WIDTH; $x++) {
+                $ret .= $this->grid[$y][$x]->__toDatabase();
             }
             if ($y + 1 < Grid::HEIGHT) {
                 $ret .= "\n";

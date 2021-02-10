@@ -90,7 +90,7 @@ class Connect4Selenium {
         $this->driver
             ->findElement(WebDriverBy::cssSelector(sprintf('#col%d', $column)))
             ->click();
-        sleep(5);
+        sleep(4);
     }
 
     private function getValueCell(?RemoteWebElement $hole) : int {

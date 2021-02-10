@@ -2,25 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Grid;
+use App\Entity\AbstractGrid;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
-/**
- * @method Grid|null find($id, $lockMode = null, $lockVersion = null)
- * @method Grid|null findOneBy(array $criteria, array $orderBy = null)
- * @method Grid[]    findAll()
- * @method Grid[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class GridRepository extends ServiceEntityRepository
+Abstract class AbstractGridRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Grid::class);
+    /**
+     * @param string $gridString
+     * @return ?AbstractGrid
+     * @throws NonUniqueResultException
+     */
+    public function findFromCurrentGridString(string $gridString) : ?AbstractGrid {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.name = :gridString')
+            ->setParameter('gridString', $gridString)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**
-    //  * @return Grid[] Returns an array of Grid objects
+    //  * @return Grid1[] Returns an array of Grid1 objects
     //  */
     /*
     public function findByExampleField($value)
@@ -36,8 +38,10 @@ class GridRepository extends ServiceEntityRepository
     }
     */
 
+
+
     /*
-    public function findOneBySomeField($value): ?Grid
+    public function findOneBySomeField($value): ?Grid1
     {
         return $this->createQueryBuilder('g')
             ->andWhere('g.exampleField = :val')

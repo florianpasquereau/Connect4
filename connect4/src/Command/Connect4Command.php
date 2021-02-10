@@ -2,9 +2,12 @@
 
 namespace App\Command;
 
+use App\Entity\AbstractGrid;
+use App\Entity\Grid0;
 use App\Exception\Connect4Exception;
 use App\Exception\Connect4SeleniumException;
 use App\Service\Connect4;
+use App\Service\ExchangeConnect4\RequestGrid;
 use App\Service\ExchangeConnect4\ResponseGrid;
 use App\Service\Grid\Grid;
 use App\Service\Selenium\Connect4Selenium;
@@ -54,10 +57,10 @@ class Connect4Command extends Command
                 break ;
             }
             $output->writeln($requestGrid->getGrid()->__toString());
-            $responseGrid = $connect4->send($requestGrid);
+            $responseGrid = $this->getResponse($connect4, $requestGrid);
             if (!$responseGrid->isSuccess())  {
                 $output->writeln('<fg=red>' . $responseGrid->getMessage() . '</>\n');
-            } else {
+            } else if ($responseGrid->isGameFinish() === false){
                 $connect4Selenium->putCoin($responseGrid);
                 $gridPrev = $requestGrid->getGrid();
                 $output->writeln(sprintf("IA play column : %d -> %s with the score : %d\n",
@@ -65,17 +68,43 @@ class Connect4Command extends Command
                     $responseGrid->getMessage(),
                     $responseGrid->getScore()
                 ));
-                $this->storeToDatabase($gridPrev, $responseGrid);
             }
         } while(!$responseGrid->isGameFinish());
         return Command::SUCCESS;
     }
 
+    /**
+     * @param Connect4 $connect4
+     * @param RequestGrid $requestGrid
+     * @return ResponseGrid
+     * @throws Connect4Exception
+     */
+    private function getResponse(Connect4 $connect4, RequestGrid $requestGrid) : ResponseGrid
+    {
+        $gridPrev = $requestGrid->getGrid();
+        $gridEntityName = $this->getEntityGridName($gridPrev);
+        $gridEntity = $this->entityManager->getRepository($gridEntityName)->findFromCurrentGridString($gridPrev->__toDatabase());
+        if ($gridEntity === null) {
+            $responseGrid = $connect4->send($requestGrid);
+            $this->storeToDatabase($gridPrev, $responseGrid);
+            return $responseGrid;
+        }
+        return new ResponseGrid(json_encode($gridEntity));
+    }
+
+    private function getEntityGridName(Grid $grid) : string
+    {
+        return sprintf("App\\Entity\\Grid%d", $grid->getCountCellFilled());
+    }
+
     private function storeToDatabase(Grid $gridPrev, ResponseGrid $responseGrid) {
-        $gridStore = new \App\Entity\Grid();
+        $gridEntityName = $this->getEntityGridName($gridPrev);
+        $gridStore = new $gridEntityName();
+        /**@var AbstractGrid $gridStore */
         $gridStore->setName($gridPrev->__toDatabase())
             ->setColumnIaSelected($responseGrid->getColumnIaSelected())
-            ->setScore($responseGrid->getScore());
+            ->setScore($responseGrid->getScore())
+            ->setGameFinish($responseGrid->isGameFinish());
         $this->entityManager->persist($gridStore);
         $this->entityManager->flush();
     }

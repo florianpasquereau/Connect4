@@ -2,40 +2,31 @@
 
 namespace App\Entity;
 
-use App\Repository\GridRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
-/**
- * @ORM\Entity(repositoryClass=GridRepository::class)
- */
-class Grid
+abstract class AbstractGrid implements JsonSerializable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=500)
      */
-    private ?string $name;
+    protected ?string $name;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private int $columnIaSelected;
+    protected int $columnIaSelected;
 
     /**
      * @ORM\Column(type="bigint")
      */
-    private int $score = 0;
+    protected int $score = 0;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected bool $gameFinish = false;
 
     public function getName(): ?string
     {
@@ -71,5 +62,29 @@ class Grid
         $this->score = $score;
 
         return $this;
+    }
+
+    public function getGameFinish(): ?bool
+    {
+        return $this->gameFinish;
+    }
+
+    public function setGameFinish(bool $gameFinish): self
+    {
+        $this->gameFinish = $gameFinish;
+
+        return $this;
+    }
+
+    public function jsonSerialize() : array
+    {
+        return [
+            "column_ia_selected" => $this->getColumnIaSelected(),
+            "time_spend" => 0,
+            "game_finish" => $this->getGameFinish(),
+            "score" => $this->getScore(),
+            "success" => "success",
+            "message" => "From Data base"
+        ];
     }
 }
